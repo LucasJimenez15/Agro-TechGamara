@@ -1,1 +1,1 @@
-# Lab6---Proyecto-final---Agro-TechGamara
+# Agro-TechGamara
