@@ -1,7 +1,7 @@
 # 🌾 AgroTech Gamara  
 **¡Gestión inteligente para tus campos!**
 
-AgroTech Gamara es una aplicación móvil pensada para optimizar la administración de lotes agrícolas. Permite llevar el control de siembras, riegos, cosechas, uso de fertilizantes, mantenimiento de maquinarias y gastos por campaña, todo desde un mismo lugar.
+AgroTech Gamara es una aplicación móvil pensada para optimizar la administración de lotes agrícolas. Permite llevar el control de siembras, riegos, cosechas, uso de fertilizantes, mantenimiento de maquinarias, administracion y control de tareas realizadas en el campo ademas de gestionar gastos por campaña, todo desde un mismo lugar.
 
 ---
 
