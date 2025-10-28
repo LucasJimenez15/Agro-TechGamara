@@ -14,8 +14,8 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 
 ## 🌿 Características principales
 
-- **Gestión de lotes:** registra ubicación, tamaño y cultivos de cada lote.  
-- **Control de siembras y cosechas:** fechas, tipo de cultivo, fotos y descripciones.  
+- **Gestión de lotes:** registra ubicación, tamaño y cultivos de cada lote por campaña.  
+- **Control de cultivos:** fechas, tipo de cultivo, fotos, descripciones y anotaciones de incidencias.  
 - **Registro de insumos:** fertilizantes, semillas, agroquímicos, combustible, etc.  
 - **Mantenimiento de maquinaria:** controla fechas, tipos de mantenimiento y alertas.  
 - **Reportes y estadísticas:** analiza costos, rendimiento y rentabilidad.  
@@ -27,35 +27,20 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 ## 🛠️ Tecnologías utilizadas
 
 **Frontend:**  
-- Java  
 - XML  
 - Android SDK  
 - Material Design  
 
 **Backend:**  
-- Java Spring Boot  
-- MySQL  
+- android studio con java o kotlin
 - Room (base de datos local para almacenamiento en caché)  
 
 ---
 
-## 🚀 Uso
-
-1. **Registro de usuario:** crea tu cuenta con tus datos personales.  
-2. **Carga de lotes:** agrega tus campos, ubicación y superficie.  
-3. **Gestión de campañas:** registrá fechas de siembra, riego y cosecha.  
-4. **Control de insumos:** administra gastos y uso de materiales.  
-5. **Visualización:** consultá reportes y rendimiento por hectárea.  
-
----
-
 ## 👨‍💻 Autor
-
-**Alumno:** Jimenez Lucas Francisco  
-**DNI:** 45.704.748  
-**Legajo:** 216/22  
+Jimenez Lucas Francisco  
 **Teléfono:** 3855150575  
 **Email:** lucasjimnez2004@gmail.com  
 
-**Materia:** Laboratorio 6 – Año 2024  
+**Materia:** Laboratorio 6 – Año 2025
 **Proyecto:** AgroTech Gamara  
