@@ -26,14 +26,20 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 
 ## 🛠️ Tecnologías utilizadas
 
-**Frontend:**  
-- XML  
+**Frontend (Interfaz de usuario):**  
+- XML (diseño de pantallas y layouts)  
 - Android SDK  
-- Material Design  
+- Material Design (componentes visuales y estilo moderno)
 
-**Backend:**  
-- Android studio con java o kotlin
-- Room (base de datos local para almacenamiento)  
+**Backend (Lógica y almacenamiento):**  
+- Android Studio con Java o Kotlin  
+- Room (base de datos local para almacenamiento y persistencia de datos)  
+- Google Maps API (para mostrar la ubicación de los lotes y marcadores en el mapa)
+
+**Servicios adicionales:**  
+- Servicios de ubicación (GPS del dispositivo)  
+- API de geolocalización para búsqueda de direcciones y coordenadas
+
 
 ---
 
