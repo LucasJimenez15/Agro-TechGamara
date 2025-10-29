@@ -52,8 +52,4 @@ Podés ver el diseño completo del proyecto **AgroTech Gamara** en el siguiente 
 
 ## 👨‍💻 Autor
 Jimenez Lucas Francisco  
-**Teléfono:** 3855150575  
-**Email:** lucasjimnez2004@gmail.com  
 
-**Materia:** Laboratorio 6 – Año 2025
-**Proyecto:** AgroTech Gamara  
