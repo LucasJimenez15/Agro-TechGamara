@@ -41,17 +41,7 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 
 Podés ver el diseño completo del proyecto **AgroTech Gamara** en el siguiente enlace interactivo:
 
-[🔗 Ver diseño en Figma](https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/skEyv6aIKDYPejIC1DUfrz/AgroTech-Gamara?node-id=0-1)
-
-O visualizalo directamente aquí debajo 👇
-
-<iframe 
-  style="border: 1px solid rgba(0, 0, 0, 0.1);" 
-  width="800" 
-  height="450" 
-  src="https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/skEyv6aIKDYPejIC1DUfrz/AgroTech-Gamara?node-id=0-1" 
-  allowfullscreen>
-</iframe>
+[🔗 Ver diseño en Figma](https://www.figma.com/design/skEyv6aIKDYPejIC1DUfrz/AgroTech-Gamara?node-id=0-1&m=dev&t=9rXfKNC24EqVRbHV-1)
 
 
 ## 👨‍💻 Autor
