@@ -37,6 +37,10 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 
 ---
 
+FIGMA 
+<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/skEyv6aIKDYPejIC1DUfrz/AgroTech-Gamara?node-id=0-1&embed-host=share" allowfullscreen></iframe>
+
+
 ## 👨‍💻 Autor
 Jimenez Lucas Francisco  
 **Teléfono:** 3855150575  
