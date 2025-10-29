@@ -32,8 +32,8 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 - Material Design  
 
 **Backend:**  
-- android studio con java o kotlin
-- Room (base de datos local para almacenamiento en caché)  
+- Android studio con java o kotlin
+- Room (base de datos local para almacenamiento)  
 
 ---
 
