@@ -40,7 +40,6 @@ Además, la app te muestra en un mapa la ubicación de tus hectáreas y te ayuda
 - Servicios de ubicación (GPS del dispositivo)  
 - API de geolocalización para búsqueda de direcciones y coordenadas
 
-
 ---
 
 ## 🎨 Vistas del Proyecto (Figma)
