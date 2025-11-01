@@ -3,7 +3,7 @@
 ---
 
 ## 👤 Datos del alumno
-| Campo | Información |
+| - | Información |
 |--------|--------------|
 | **Apellido y Nombre** | Jimenez Lucas Francisco |
 | **DNI** | 45704748 |
