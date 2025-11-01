@@ -1,4 +1,4 @@
-# 📘 Especificación de Requerimientos y Diagrama de Casos de Uso
+# 📘 Especificación de Requerimientos 
 
 ## 🧾 Datos del Alumno
 
@@ -59,6 +59,6 @@ Será quien gestione toda la información de los lotes, cultivos, insumos, maqui
 | 3 | Usabilidad | La interfaz debe ser intuitiva y fácil de usar, incluso para usuarios sin experiencia técnica. | Se utilizará un diseño basado en Material Design. |
 | 4 | Compatibilidad | La aplicación debe ser compatible con dispositivos Android 8.0 (Oreo) o superior. | Permite llegar a un amplio rango de usuarios. |
 | 6 | Escalabilidad | El sistema debe permitir agregar más lotes, campañas y usuarios sin afectar el rendimiento. | Asegura que la app pueda crecer sin perder estabilidad. |
-| 7 | Mantenibilidad | El código debe estar documentado y estructurado bajo el patrón MVC. | Facilita futuras actualizaciones o corrección de errores. |
-| 8 | Confiabilidad | La app debe garantizar la integridad de los datos aun si se pierde la conexión a Internet. | Se usará Room como base de datos local para sincronización posterior. |
+| 7 | Mantenibilidad | El código debe estar documentado y estructurado bajo el patrón MVVC. | Facilita futuras actualizaciones o corrección de errores. |
+| 8 | Confiabilidad | La app debe garantizar la integridad de los datos aun si se pierde la conexión a Internet. | Se usará Room (sqlite) como base de datos local para sincronización posterior. |
 | 10 | Portabilidad | El sistema debe poder ejecutarse en diferentes tamaños de pantalla (smartphones y tablets). | Se aplicará diseño responsive adaptable a pantallas móviles. |
