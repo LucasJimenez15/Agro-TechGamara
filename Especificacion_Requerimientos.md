@@ -1,4 +1,4 @@
-# 📘 Especificación de Requerimientos y Diagrama de Casos de Uso
+# 📘 Especificación de Requerimientos
 
 ---
 
