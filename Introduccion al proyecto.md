@@ -38,7 +38,7 @@ Para tomar como referencia alguna aplicacion del rubro me lleve de **Agroptima**
 Yo me orienté para hacer esta aplicación de acuerdo al campo que trabajamos en nuestra familia.  
 El campo está ubicado sobre la **ruta 5** en la provincia de **Santiago del Estero**, y la zona es conocida como **“Colonia Gamara”**.  
 
-Una aplicación así nos sería muy útil para gestionar esta información.
+Una aplicación así nos sería muy útil para gestionar tareas u otras actividades de campo.
 
 ---
 
