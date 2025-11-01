@@ -29,6 +29,8 @@ También tendrá información sobre el rendimiento de cada una de estas hectáre
 
 Tendrá también una función para llevar un registro del mantenimiento de los tractores y, por último, en el inicio de la aplicación se mostrará marcada la ubicación en el mapa de cada una de las hectáreas o lotes.
 
+Para tomar como referencia alguna aplicacion del rubro me lleve de **Agroptima** , que esta basada en un concepto muy parecido.
+
 ---
 
 ## 🏢 Descripción de la empresa u organismo
