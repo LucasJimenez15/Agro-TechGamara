@@ -3,6 +3,7 @@ package com.example.agrotechgamara;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.transition.Scene;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,8 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(intent);
+                // APLICAR TRANSICIÓN
+                overridePendingTransition(R.anim.entrada, R.anim.salida);
                 finish();
             }
         }, 3000);
