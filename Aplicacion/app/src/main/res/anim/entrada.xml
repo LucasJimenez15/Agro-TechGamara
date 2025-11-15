@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-    <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+    <alpha
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:interpolator="@android:anim/accelerate_interpolator"
         android:fromAlpha="0.0"
         android:toAlpha="1.0"
         android:duration="800"/>
 </set>
+
+
+<!--✅ Explicación del código
+1. <?xml version="1.0" encoding="utf-8"?>
+Indica que este archivo es un XML y qué tipo de codificación usa (UTF-8).
+
+2. <set ...>
+El tag <set> se usa para combinar varias animaciones en un mismo archivo. Permite que diferentes efectos se ejecuten al mismo tiempo o uno después de otro. Con <set> podés juntar animaciones como:
+
+- alpha (aparecer/desaparecer)
+- translate (mover)
+- rotate (girar)
+- scale (agrandar/achicar)
+
+👉 En pocas palabras: <set> = carpeta donde metés varias animaciones para crear un efecto más completo.
+Ejemplo de uso: Que un botón aparezca y se deslice hacia arriba al mismo tiempo.
+
+3. xmlns:android="http://schemas.android.com/apk/res/android"
+Es el espacio de nombres que permite usar atributos de Android como android:duration, android:alpha, etc.
+
+4. <alpha ...>
+Define una animación de transparencia (fade in / fade out). En este caso, crea un efecto fade in (que aparece suavemente).
+
+5. android:interpolator="@android:anim/accelerate_interpolator"
+Controla la velocidad del efecto. Este interpolador hace que la animación: Empiece lenta. Termine más rápida
+
+6. android:fromAlpha="0.0"
+Nivel inicial de transparencia. 0.0 = completamente invisible.
+
+7. android:toAlpha="1.0"
+Nivel final de transparencia. 1.0 = completamente visible.
+
+8. android:duration="800"
+Duración de la animación medida en milisegundos. 800 ms = 0.8 segundos.-->
