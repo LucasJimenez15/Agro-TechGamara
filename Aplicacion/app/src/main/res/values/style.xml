@@ -18,10 +18,6 @@
         <item name="cornerSize">50%</item><!-- O define el tamaño como "16dp" u otra medida -->
     </style>
 
-    <style name="BotonRedondeado">
-        <item name="android:background">@drawable/style_border_radius</item>
-        <item name="backgroundColor">@color/VerdeBoton</item>
-    </style>
 
 </resources>
 
