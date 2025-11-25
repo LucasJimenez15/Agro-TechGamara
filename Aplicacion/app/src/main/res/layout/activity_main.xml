@@ -46,8 +46,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="20sp"
+                android:layout_margin="10dp"
                 android:fontFamily="@font/montserrat_regular"
-                android:inputType="textPassword"
+                android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:background="@drawable/style_edittext"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -72,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="20sp"
+                android:layout_margin="10dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:inputType="textPassword"
                 android:textColor="@color/black"

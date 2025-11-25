@@ -6,16 +6,21 @@ import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 
 @Entity(
-        tableName = "sembrado"
-//Luego probar agregar la clave foranea y si andatodo la dejo
-//       ,
-//        foreignKeys = @ForeignKey(
-//                entity = Campaña.class,
-//                parentColumns = "idCampaña",
-//                childColumns = "idCampaña",
-//                onDelete = ForeignKey.CASCADE
-//        )
+        tableName = "sembrado"//,
+        //Luego probar agregar la clave foranea y si andatodo la dejo
+        //foreignKeys = {
+        //        @ForeignKey(entity = Campaña.class, parentColumns = "idCampaña", childColumns = "idCampaña", onDelete = ForeignKey.SET_NULL),
+        //        @ForeignKey(entity = Lote.class, parentColumns = "idLote", childColumns = "idLote", onDelete = ForeignKey.SET_NULL),
+        //        @ForeignKey(entity = Rendimiento.class, parentColumns = "idRendimiento", childColumns = "idRendimiento", onDelete = ForeignKey.SET_NULL)
+        //},
+        //indices = {@Index("idCampaña"), @Index("idLote"), @Index("idRendimiento")}
 )
+
+/*✔️ RESUMEN SIMPLE
+CASCADE → si borro el padre, borra a los hijos también
+SET NULL → si borro el padre, el hijo queda con columna NULL
+RESTRICT / NO ACTION → NO deja borrar el padre si tiene hijos*/
+
 public class Sembrado {
 
     @PrimaryKey(autoGenerate = true)
