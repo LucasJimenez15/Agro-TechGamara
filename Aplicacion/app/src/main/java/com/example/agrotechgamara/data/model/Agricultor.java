@@ -21,7 +21,7 @@ public class Agricultor {
     private String contaAgricultor;
 
     @ColumnInfo(name = "codVerifAgricultor")
-    private Integer codVerifAgricultor;
+    private int codVerifAgricultor;
 
     // Getters & Setters
     public int getIdAgricultor() { return idAgricultor; }
@@ -36,6 +36,6 @@ public class Agricultor {
     public String getContaAgricultor() { return contaAgricultor; }
     public void setContaAgricultor(String contaAgricultor) { this.contaAgricultor = contaAgricultor; }
 
-    public Integer getCodVerifAgricultor() { return codVerifAgricultor; }
-    public void setCodVerifAgricultor(Integer codVerifAgricultor) { this.codVerifAgricultor = codVerifAgricultor; }
+    public int getCodVerifAgricultor() { return codVerifAgricultor; }
+    public void setCodVerifAgricultor(int codVerifAgricultor) { this.codVerifAgricultor = codVerifAgricultor; }
 }

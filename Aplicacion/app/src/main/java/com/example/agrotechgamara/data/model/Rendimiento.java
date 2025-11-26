@@ -5,12 +5,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "rendimiento",
-        foreignKeys = {
-                @ForeignKey(entity = Sembrado.class, parentColumns = "idRendimiento", childColumns = "idRendimiento", onDelete = ForeignKey.SET_NULL)
-        }
-)
-
+@Entity(tableName = "rendimiento")
 public class Rendimiento {
 
     @PrimaryKey(autoGenerate = true)

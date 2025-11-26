@@ -14,12 +14,12 @@ public class Campaña {
 
     @ColumnInfo(name = "añoCampaña")
     @NotNull
-    private Integer añoCampaña;
+    private int añoCampaña;
 
     // Getters & Setters
     public int getIdCampaña() { return idCampaña; }
     public void setIdCampaña(int idCampaña) { this.idCampaña = idCampaña; }
 
-    public Integer getAñoCampaña() { return añoCampaña; }
-    public void setAñoCampaña(Integer añoCampaña) { this.añoCampaña = añoCampaña; }
+    public int getAñoCampaña() { return añoCampaña; }
+    public void setAñoCampaña(int añoCampaña) { this.añoCampaña = añoCampaña; }
 }

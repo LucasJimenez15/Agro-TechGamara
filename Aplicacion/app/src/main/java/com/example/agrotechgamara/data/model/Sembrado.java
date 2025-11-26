@@ -11,6 +11,7 @@ import androidx.room.ColumnInfo;
         //foreignKeys = {
         //        @ForeignKey(entity = Campaña.class, parentColumns = "idCampaña", childColumns = "idCampaña", onDelete = ForeignKey.SET_NULL),
         //        @ForeignKey(entity = Lote.class, parentColumns = "idLote", childColumns = "idLote", onDelete = ForeignKey.SET_NULL),
+        //        @ForeignKey(entity = Rendimiento.class, parentColumns = "idRendimiento", childColumns = "idRendimiento", onDelete = ForeignKey.SET_NULL)
         //},
         //indices = {@Index("idCampaña"), @Index("idLote"), @Index("idRendimiento")}
 )

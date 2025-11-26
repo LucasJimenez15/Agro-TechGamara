@@ -2,9 +2,14 @@ package com.example.agrotechgamara.data.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "actividades")
+@Entity(
+          tableName = "actividades"//,
+//        foreignKeys = @ForeignKey(entity = Recordatorio.class,parentColumns = "idRecordatorio",childColumns = "idRecordatorio",onDelete = ForeignKey.SET_NULL)
+)
+
 public class Actividades {
 
     @PrimaryKey(autoGenerate = true)
@@ -24,7 +29,7 @@ public class Actividades {
     private byte[] fotosActividad;
 
     @ColumnInfo(name = "idRecordatorio")
-    private Integer idRecordatorio;
+    private int idRecordatorio;
 
     // Getters & Setters
     public int getIdActividad() { return idActividad; }
@@ -42,6 +47,6 @@ public class Actividades {
     public byte[] getFotosActividad() { return fotosActividad; }
     public void setFotosActividad(byte[] fotosActividad) { this.fotosActividad = fotosActividad; }
 
-    public Integer getIdRecordatorio() { return idRecordatorio; }
-    public void setIdRecordatorio(Integer idRecordatorio) { this.idRecordatorio = idRecordatorio; }
+    public int getIdRecordatorio() { return idRecordatorio; }
+    public void setIdRecordatorio(int idRecordatorio) { this.idRecordatorio = idRecordatorio; }
 }
