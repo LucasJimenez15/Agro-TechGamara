@@ -1,13 +1,11 @@
-package com.example.agrotechgamara;
+package com.example.agrotechgamara.ui.activitys;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.agrotechgamara.R;
 
 public class MainActivity extends AppCompatActivity {
     
