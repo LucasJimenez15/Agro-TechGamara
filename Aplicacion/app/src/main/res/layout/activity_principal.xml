@@ -20,9 +20,13 @@
         android:id="@+id/btnNav"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled" />
+
+        <!--labelVisibilityMode controla cuándo se muestra el texto debajo de los íconos en el BottomNavigationView. 📌 En resumen: Define si el texto del botón se muestra siempre, nunca, solo cuando está seleccionado, o automático según la cantidad de ítems.-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

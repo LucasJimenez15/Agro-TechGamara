@@ -5,17 +5,14 @@
         android:id="@+id/nav_inicio"
         android:icon="@drawable/inicio"
         android:title="@string/title_home" />
-
     <item
         android:id="@+id/nav_lotes"
         android:icon="@drawable/lotes_verde"
         android:title="@string/lotes" />
-
     <item
         android:id="@+id/nav_control"
         android:icon="@drawable/control_verde"
         android:title="@string/control" />
-
     <item
         android:id="@+id/nav_perfil"
         android:icon="@drawable/perfil_verde"
