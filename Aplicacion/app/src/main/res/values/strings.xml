@@ -2,7 +2,7 @@
     <string name="app_name">AgroTech Gamara</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Inicio</string>
     <string name="lotes">Lotes\n</string>
     <string name="control">Control\n</string>
     <string name="perfil">Perfil\n</string>
