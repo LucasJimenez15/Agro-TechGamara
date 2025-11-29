@@ -14,25 +14,20 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.activitys.PrincipalActivity"
-            android:exported="false"
-            android:label="@string/title_activity_principal" />
-        <activity
-            android:name=".ui.activitys.PrincipalActivitiy"
-            android:exported="false"
-            android:theme="@style/Theme.AgroTechGamara" />
+            android:exported="false"/>
         <activity
             android:name=".ui.activitys.SplashScreen"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activitys.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
