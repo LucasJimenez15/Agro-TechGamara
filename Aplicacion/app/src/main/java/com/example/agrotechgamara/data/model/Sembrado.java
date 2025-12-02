@@ -21,6 +21,8 @@ CASCADE → si borro el padre, borra a los hijos también
 SET NULL → si borro el padre, el hijo queda con columna NULL
 RESTRICT / NO ACTION → NO deja borrar el padre si tiene hijos*/
 
+/*leer la fecha en texto es más fácil para el humano al inspeccionar la base de datos, sin embargo el código es más robusto usando Long por velocidad de procesamiento y para consultas. Usare TypeConverters para que en Java use objetos Date, pero la base de datos guardara Long automáticamente.*/
+
 public class Sembrado {
 
     @PrimaryKey(autoGenerate = true)
