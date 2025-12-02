@@ -4,8 +4,7 @@
     android:id="@+id/container"
     android:background="@color/fondoClaro"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/frameContainer"
@@ -20,10 +19,29 @@
         android:id="@+id/btnNav"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/buttom_nav_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+
+        app:itemIconTint="@color/nav_icon_color"
+        app:itemTextColor="@color/nav_text_color"
+
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+
+        app:itemTextAppearanceActive="@style/BottomNavTextStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
+
+        app:labelVisibilityMode="labeled" />
+
+    <!-- itemTextAppearanceInactive controla el estilo del texto cuando el ítem NO está seleccionado. -->
+    <!-- itemTextAppearanceActive controla el estilo del texto cuando el ítem está seleccionado (tamaño, fuente, color). -->
+    <!-- itemActiveIndicatorStyle define el estilo del indicador de selección (el fondo que aparece detrás del ícono cuando está activo O seleccionado).
+         Usarlo como "@android:color/transparent" hace que dicho fondo no se muestre, eliminando el cuadrado morado detrás de los íconos. -->
+    <!-- labelVisibilityMode controla cuándo se muestra el texto debajo de los íconos en el BottomNavigationView. Define si el texto del botón se muestra siempre, nunca, solo cuando está seleccionado, o automático según la cantidad de ítems.
+         “labeled” = siempre muestra el texto bajo cada ícono. -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

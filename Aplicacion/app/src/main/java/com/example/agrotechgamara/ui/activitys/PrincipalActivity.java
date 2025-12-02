@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.agrotechgamara.R;
+import com.example.agrotechgamara.ui.fragments.InicioFragment;
 import com.example.agrotechgamara.ui.fragments.LoginFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -15,12 +16,11 @@ public class PrincipalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-
         BottomNavigationView bnv = findViewById(R.id.btnNav);
 
         // Fragment por defecto
         if (savedInstanceState == null) {
-            cargarFragment(new LoginFragment());
+            cargarFragment(new InicioFragment());
         }
 
         // Listener usando IF (EVITA EL ERROR)
@@ -30,13 +30,13 @@ public class PrincipalActivity extends AppCompatActivity {
             Fragment fragment = null;
 
             if (id == R.id.nav_inicio) {
-                fragment = new LoginFragment();
+                fragment = new InicioFragment();
             } else if (id == R.id.nav_lotes) {
-                fragment = new LoginFragment();
+                fragment = new InicioFragment();
             } else if (id == R.id.nav_control) {
-                fragment = new LoginFragment();
+                fragment = new InicioFragment();
             } else if (id == R.id.nav_perfil) {
-                fragment = new LoginFragment();
+                fragment = new InicioFragment();
             }
 
             if (fragment != null) {
