@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(
           tableName = "actividades"//,
 //        foreignKeys = @ForeignKey(entity = Recordatorio.class,parentColumns = "idRecordatorio",childColumns = "idRecordatorio",onDelete = ForeignKey.SET_NULL)
@@ -23,7 +25,7 @@ public class Actividades {
     private String descActividad;
 
     @ColumnInfo(name = "fechaActividad")
-    private String fechaActividad;
+    private Date fechaActividad;
 
     @ColumnInfo(name = "fotosActividad", typeAffinity = ColumnInfo.BLOB)
     private byte[] fotosActividad;
@@ -41,8 +43,8 @@ public class Actividades {
     public String getDescActividad() { return descActividad; }
     public void setDescActividad(String descActividad) { this.descActividad = descActividad; }
 
-    public String getFechaActividad() { return fechaActividad; }
-    public void setFechaActividad(String fechaActividad) { this.fechaActividad = fechaActividad; }
+    public Date getFechaActividad() { return fechaActividad; }
+    public void setFechaActividad(Date fechaActividad) { this.fechaActividad = fechaActividad; }
 
     public byte[] getFotosActividad() { return fotosActividad; }
     public void setFotosActividad(byte[] fotosActividad) { this.fotosActividad = fotosActividad; }

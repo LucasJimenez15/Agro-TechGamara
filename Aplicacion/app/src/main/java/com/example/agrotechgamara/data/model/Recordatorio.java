@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity(tableName = "recordatorio")
 public class Recordatorio {
 
@@ -12,7 +14,7 @@ public class Recordatorio {
     private int idRecordatorio;
 
     @ColumnInfo(name = "fechaActivacion")
-    private String fechaActivacion; // timestamp guardado como String
+    private Date fechaActivacion; // timestamp guardado como String
 
     @ColumnInfo(name = "descRecordatorio")
     private String descRecordatorio;
@@ -21,8 +23,8 @@ public class Recordatorio {
     public int getIdRecordatorio() { return idRecordatorio; }
     public void setIdRecordatorio(int idRecordatorio) { this.idRecordatorio = idRecordatorio; }
 
-    public String getFechaActivacion() { return fechaActivacion; }
-    public void setFechaActivacion(String fechaActivacion) { this.fechaActivacion = fechaActivacion; }
+    public Date getFechaActivacion() { return fechaActivacion; }
+    public void setFechaActivacion(Date fechaActivacion) { this.fechaActivacion = fechaActivacion; }
 
     public String getDescRecordatorio() { return descRecordatorio; }
     public void setDescRecordatorio(String descRecordatorio) { this.descRecordatorio = descRecordatorio; }

@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
+import java.util.Date;
 
 @Entity(
         tableName = "sembrado"//,
@@ -29,9 +30,11 @@ public class Sembrado {
     @ColumnInfo(name = "idSembrado")
     private int idSembrado;
 
+    // se declara el tipo 'Date'. Room buscará automáticamente en la clase 'Converters'
+    // cómo transformar este 'Date' a un número para guardarlo.
     @ColumnInfo(name = "fechaSiembra")
-    private String fechaSiembra;
-    //Guardás la fecha como texto (Room no tiene tipo date)
+    private Date fechaSiembra;
+    /*Simplemente usa java.util.Date como tipo de dato en los modelos. No usar String ni long directamente en la clase del modelo. Room hará el trabajo sucio gracias al converter.*/
 
     @ColumnInfo(name = "nomSiembra")
     private String nomSiembra;
@@ -39,10 +42,10 @@ public class Sembrado {
     Para Room, simplemente es: private String nomSiembra; Si querés limitar caracteres se hace con validaciones, no con la base.*/
 
     @ColumnInfo(name = "fechaRiego")
-    private String fechaRiego;
+    private Date fechaRiego;
 
     @ColumnInfo(name = "fechaCosecha")
-    private String fechaCosecha;
+    private Date fechaCosecha;
 
     @ColumnInfo(name = "AgroquimicosSiembra")
     private String agroquimicosSiembra;
@@ -67,17 +70,17 @@ public class Sembrado {
     public int getIdSembrado() { return idSembrado; }
     public void setIdSembrado(int idSembrado) { this.idSembrado = idSembrado; }
 
-    public String getFechaSiembra() { return fechaSiembra; }
-    public void setFechaSiembra(String fechaSiembra) { this.fechaSiembra = fechaSiembra; }
+    public Date getFechaSiembra() { return fechaSiembra; }
+    public void setFechaSiembra(Date fechaSiembra) { this.fechaSiembra = fechaSiembra; }
 
     public String getNomSiembra() { return nomSiembra; }
     public void setNomSiembra(String nomSiembra) { this.nomSiembra = nomSiembra; }
 
-    public String getFechaRiego() { return fechaRiego; }
-    public void setFechaRiego(String fechaRiego) { this.fechaRiego = fechaRiego; }
+    public Date getFechaRiego() { return fechaRiego; }
+    public void setFechaRiego(Date fechaRiego) { this.fechaRiego = fechaRiego; }
 
-    public String getFechaCosecha() { return fechaCosecha; }
-    public void setFechaCosecha(String fechaCosecha) { this.fechaCosecha = fechaCosecha; }
+    public Date getFechaCosecha() { return fechaCosecha; }
+    public void setFechaCosecha(Date fechaCosecha) { this.fechaCosecha = fechaCosecha; }
 
     public String getAgroquimicosSiembra() { return agroquimicosSiembra; }
     public void setAgroquimicosSiembra(String agroquimicosSiembra) { this.agroquimicosSiembra = agroquimicosSiembra; }

@@ -5,6 +5,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+
+import com.example.agrotechgamara.data.dao.LoteDao;
 import com.example.agrotechgamara.data.model.*;
 import com.example.agrotechgamara.util.Converters;
 
@@ -13,10 +15,10 @@ import com.example.agrotechgamara.util.Converters;
         Lote.class,
         Ubicacion.class,
         Sembrado.class,
-        Campaña.class, // O Campana.class según como hayas nombrado tu archivo Java
+        Campaña.class,
         Agricultor.class,
         Rendimiento.class,
-        Actividades.class, // O Actividad.class
+        Actividades.class,
         Recordatorio.class,
         Empleado.class,
         ActividadEmpleado.class,
