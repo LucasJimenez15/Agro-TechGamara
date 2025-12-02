@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
+
+import java.util.Arrays;
 import java.util.Date;
 
 @Entity(
@@ -25,6 +27,20 @@ RESTRICT / NO ACTION → NO deja borrar el padre si tiene hijos*/
 /*leer la fecha en texto es más fácil para el humano al inspeccionar la base de datos, sin embargo el código es más robusto usando Long por velocidad de procesamiento y para consultas. Usare TypeConverters para que en Java use objetos Date, pero la base de datos guardara Long automáticamente.*/
 
 public class Sembrado {
+
+    public Sembrado(int idSembrado, Date fechaSiembra, String nomSiembra, Date fechaRiego, Date fechaCosecha, String agroquimicosSiembra, String descCampo, byte[] fotosCampo, int idCampaña, int idLote, int idRendimiento) {
+        this.idSembrado = idSembrado;
+        this.fechaSiembra = fechaSiembra;
+        this.nomSiembra = nomSiembra;
+        this.fechaRiego = fechaRiego;
+        this.fechaCosecha = fechaCosecha;
+        this.agroquimicosSiembra = agroquimicosSiembra;
+        this.descCampo = descCampo;
+        this.fotosCampo = fotosCampo;
+        this.idCampaña = idCampaña;
+        this.idLote = idLote;
+        this.idRendimiento = idRendimiento;
+    }
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "idSembrado")
@@ -99,4 +115,22 @@ public class Sembrado {
 
     public int getIdRendimiento() { return idRendimiento; }
     public void setIdRendimiento(int idRendimiento) { this.idRendimiento = idRendimiento; }
+
+    @Override
+    public String toString() {
+        return "Sembrado{" +
+                "idSembrado=" + idSembrado +
+                ", fechaSiembra=" + fechaSiembra +
+                ", nomSiembra='" + nomSiembra + '\'' +
+                ", fechaRiego=" + fechaRiego +
+                ", fechaCosecha=" + fechaCosecha +
+                ", agroquimicosSiembra='" + agroquimicosSiembra + '\'' +
+                ", descCampo='" + descCampo + '\'' +
+                ", fotosCampo=" + Arrays.toString(fotosCampo) +
+                ", idCampaña=" + idCampaña +
+                ", idLote=" + idLote +
+                ", idRendimiento=" + idRendimiento +
+                '}';
+    }
+
 }

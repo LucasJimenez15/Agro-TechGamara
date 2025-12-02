@@ -6,7 +6,19 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.agrotechgamara.data.dao.ActividadEmpleadoDao;
+import com.example.agrotechgamara.data.dao.ActividadesDao;
+import com.example.agrotechgamara.data.dao.AgricultorDao;
+import com.example.agrotechgamara.data.dao.CampañaDao;
+import com.example.agrotechgamara.data.dao.EmpleadoDao;
+import com.example.agrotechgamara.data.dao.IncidenciaDao;
 import com.example.agrotechgamara.data.dao.LoteDao;
+import com.example.agrotechgamara.data.dao.PagosDao;
+import com.example.agrotechgamara.data.dao.PagosEmpleadoDao;
+import com.example.agrotechgamara.data.dao.RecordatorioDao;
+import com.example.agrotechgamara.data.dao.RendimientoDao;
+import com.example.agrotechgamara.data.dao.SembradoDao;
+import com.example.agrotechgamara.data.dao.UbicacionDao;
 import com.example.agrotechgamara.data.model.*;
 import com.example.agrotechgamara.util.Converters;
 
@@ -35,10 +47,10 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract LoteDao loteDao();
     public abstract UbicacionDao ubicacionDao();
     public abstract SembradoDao sembradoDao();
-    public abstract CampanaDao campanaDao();
+    public abstract CampañaDao campanaDao();
     public abstract AgricultorDao agricultorDao();
     public abstract RendimientoDao rendimientoDao();
-    public abstract ActividadesDao actividadesDao(); // (Asumiendo que creaste este basado en el ejemplo anterior)
+    public abstract ActividadesDao actividadesDao();
     public abstract RecordatorioDao recordatorioDao();
     public abstract EmpleadoDao empleadoDao();
     public abstract ActividadEmpleadoDao actividadEmpleadoDao();
