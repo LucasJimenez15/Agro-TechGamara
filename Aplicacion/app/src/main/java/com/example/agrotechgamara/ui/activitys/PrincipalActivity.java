@@ -53,5 +53,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.frameContainer, fragment)
                 .commit();
+        // APLICAR TRANSICIÓN
+        overridePendingTransition(R.anim.entrada, R.anim.salida);
     }
 }
