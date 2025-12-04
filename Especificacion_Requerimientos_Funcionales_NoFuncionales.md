@@ -35,7 +35,7 @@ Será quien gestione toda la información de los lotes, cultivos, insumos, maqui
 | 15 | Gestión de pagos | - | El sistema recupera la información de acuerdo al calendario y además permite agregar a determinado día un empleado que haya trabajado ese día. | Se mostrará la información de qué días trabajaron los empleados. |
 | 16 | Edicion de camapaña | - | El sistema permite modificar los datos de la campaña registrada a travez de un boton en el sistema que te lleva a dicha pantalla. | Se mostrará la información actualizada de la campaña. |
 | 17 | ELiminacion de incidencia | - | El sistema permite eliminar los datos de la incidencia registrada a travez de un boton en el sistema | Desaparecera de la pantalla de detalles de campaña la incidencia. |
-| 17 | ELiminacion de actividad | - | El sistema permite eliminar los datos de la actividad registrada a travez de un boton en el sistema | Desaparecera de la pantalla de control la actividad. |
+| 18 | ELiminacion de actividad | - | El sistema permite eliminar los datos de la actividad registrada a travez de un boton en el sistema | Desaparecera de la pantalla de control la actividad. |
 
 ---
 
