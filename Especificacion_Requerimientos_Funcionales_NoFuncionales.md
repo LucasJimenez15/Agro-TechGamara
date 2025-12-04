@@ -33,6 +33,9 @@ Será quien gestione toda la información de los lotes, cultivos, insumos, maqui
 | 13 | Registro de tareas y actividades de campo | Título de actividad, descripción, fecha | El sistema guarda las tareas realizadas por los empleados en la base de datos. | El sistema muestra “Actividad registrada con éxito”. |
 | 14 | Consulta de detalles de la actividad de campo | Selección de actividad | El sistema recupera de la base de datos los datos de la actividad. | Se muestra la interfaz de la actividad con toda la info y se puede agregar recordatorios y además los empleados que realizaron la tarea. |
 | 15 | Gestión de pagos | - | El sistema recupera la información de acuerdo al calendario y además permite agregar a determinado día un empleado que haya trabajado ese día. | Se mostrará la información de qué días trabajaron los empleados. |
+| 16 | Edicion de camapaña | - | El sistema permite modificar los datos de la campaña registrada a travez de un boton en el sistema que te lleva a dicha pantalla. | Se mostrará la información actualizada de la campaña. |
+| 17 | ELiminacion de incidencia | - | El sistema permite eliminar los datos de la incidencia registrada a travez de un boton en el sistema | Desaparecera de la pantalla de detalles de campaña la incidencia. |
+| 17 | ELiminacion de actividad | - | El sistema permite eliminar los datos de la actividad registrada a travez de un boton en el sistema | Desaparecera de la pantalla de control la actividad. |
 
 ---
 
