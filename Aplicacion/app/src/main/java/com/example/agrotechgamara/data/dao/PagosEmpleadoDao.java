@@ -13,6 +13,9 @@ public interface PagosEmpleadoDao {
     @Insert
     void insertPagoEmpleado(PagosEmpleado relacion);
 
+    @Delete
+    void deletePagoEmpleado(PagosEmpleado empleado);
+
     // Obtener todos los pagos a dar a un empleado específico
     // Seleccionamos la tabla 'pagos', unimos con la tabla intermedia, y filtramos por empleado.
     @Query("SELECT P.* FROM pagos P " +

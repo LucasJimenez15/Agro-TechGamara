@@ -9,7 +9,10 @@ import java.util.List;
 public interface CampañaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertCampana(Campaña campaña);
+    void insertCampaña(Campaña campaña);
+
+    @Delete
+    void deleteCampaña(Campaña campaña);
 
     // Ordena las campañas de la más reciente a la más antigua
     @Query("SELECT * FROM campaña ORDER BY añoCampaña DESC")

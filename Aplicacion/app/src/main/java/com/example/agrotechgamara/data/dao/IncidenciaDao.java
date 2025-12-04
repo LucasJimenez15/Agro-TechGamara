@@ -10,6 +10,9 @@ public interface IncidenciaDao {
     @Insert
     void insertIncidencia(Incidencia incidencia);
 
+    @Delete
+    void deleteIncidencia(Incidencia incidencia);
+
     @Query("SELECT * FROM incidencia ORDER BY idIncidencia DESC")
     LiveData<List<Incidencia>> getAllIncidencias();
 

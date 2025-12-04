@@ -11,6 +11,9 @@ public interface ActividadesDao {
     @Insert
     long insertActividad(Actividades actividad); // Devuelve ID
 
+    @Delete
+    void deleteActividad(Actividades actividad);
+
     @Query("SELECT * FROM actividades")
     LiveData<List<Actividades>> getAllActividades();
 
