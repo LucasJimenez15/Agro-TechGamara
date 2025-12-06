@@ -22,6 +22,9 @@ import com.example.agrotechgamara.data.dao.UbicacionDao;
 import com.example.agrotechgamara.data.model.*;
 import com.example.agrotechgamara.util.Converters;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 // 1. Definir todas las entidades
 @Database(entities = {
         Lote.class,
@@ -43,11 +46,18 @@ import com.example.agrotechgamara.util.Converters;
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
+    // --- EXECUTOR PARA HILOS SECUNDARIOS (NUEVO) ---
+    // Creamos un pool de 4 hilos para operaciones de base de datos
+    // Esto es lo que usan los ViewModels con: AppDatabase.databaseWriteExecutor.execute(...)
+    private static final int NUMBER_OF_THREADS = 4;
+    public static final ExecutorService databaseWriteExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
     // 3. Exponer los DAOs (Getters abstractos)
     public abstract LoteDao loteDao();
     public abstract UbicacionDao ubicacionDao();
     public abstract SembradoDao sembradoDao();
-    public abstract CampañaDao campanaDao();
+    public abstract CampañaDao campañaDao();
     public abstract AgricultorDao agricultorDao();
     public abstract RendimientoDao rendimientoDao();
     public abstract ActividadesDao actividadesDao();

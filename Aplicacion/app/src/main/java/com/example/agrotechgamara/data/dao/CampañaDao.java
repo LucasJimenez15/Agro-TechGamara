@@ -16,5 +16,6 @@ public interface CampañaDao {
 
     // Ordena las campañas de la más reciente a la más antigua
     @Query("SELECT * FROM campaña ORDER BY añoCampaña DESC")
-    LiveData<List<Campaña>> getAllCampanas();
+    LiveData<List<Campaña>> getAllcampañas();
+
 }
