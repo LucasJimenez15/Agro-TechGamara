@@ -12,6 +12,9 @@ import com.example.agrotechgamara.data.model.*;
 
 import java.util.List;
 
+/*Agrupa: Lote, Campaña, Sembrado, Rendimiento, Incidencia. Uso: Ideal para la pantalla principal del mapa, detalle
+de lotes y registro de producción.*/
+
 public class ProduccionViewModel extends AndroidViewModel {
 
     // DAOs necesarios
