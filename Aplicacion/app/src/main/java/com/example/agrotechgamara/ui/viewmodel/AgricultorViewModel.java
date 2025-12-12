@@ -29,7 +29,7 @@ public class AgricultorViewModel extends AndroidViewModel {
     // En MVVM real, el resultado se pasaría a un LiveData<EstadoLogin>
     public void buscarPorEmail(String email) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            Agricultor a = agricultorDao.getAgricultorByEmail(email);
+            Agricultor a = agricultorDao.getAgricultorByEmail(email).getValue();
             // Aquí podrías postear el valor a un MutableLiveData<Agricultor> usuarioActual;
         });
     }

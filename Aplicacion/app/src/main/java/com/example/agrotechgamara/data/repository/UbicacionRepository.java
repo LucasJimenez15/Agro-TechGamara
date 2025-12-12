@@ -27,11 +27,11 @@ public class UbicacionRepository {
     public void fetchAdvancedDetails(int idLote, Callback<String> callback) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             // A. Primero, obtenemos la información base de nuestro DB local
-            Ubicacion ubicacion = ubicacionDao.getUbicacionByIdSync(idLote);
+            Ubicacion ubicacion = ubicacionDao.getUbicacionById(idLote).getValue();
 
             if (ubicacion != null) {
                 // B. Luego, usamos la información local para llamar a la API externa
-                String advancedInfo = mapsService.getLoteDetails(ubicacion.latitud, ubicacion.longitud);
+                String advancedInfo = mapsService.getLoteDetails(ubicacion.getLatitud(), ubicacion.getLongitud());
 
                 // C. Enviamos el resultado a quien nos llamó (el ViewModel)
                 callback.onSuccess(advancedInfo);
@@ -46,4 +46,5 @@ public class UbicacionRepository {
         void onSuccess(T result);
         void onError(String error);
     }
+
 }

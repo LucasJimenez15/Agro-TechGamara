@@ -9,19 +9,20 @@ import androidx.lifecycle.Transformations;
 import com.example.agrotechgamara.data.dao.*;
 import com.example.agrotechgamara.data.database.AppDatabase;
 import com.example.agrotechgamara.data.model.*;
+import com.example.agrotechgamara.data.repository.ProduccionRepository;
 
 import java.util.List;
 
 /*Agrupa: Lote, Campaña, Sembrado, Rendimiento, Incidencia. Uso: Ideal para la pantalla principal del mapa, detalle
 de lotes y registro de producción.*/
+
 /* 🛑 El Problema: Evitar la "Sobrecarga de la Pantalla" En la aplicación, una sola pantalla (ej., la que muestra toda la info de los lotes, campaña, rendimiento, incidencias, es decir la pantalla de detalles de lote) necesita datos de múltiples tablas a la vez (Lotes, Sembrado, Campaña, Incidencia). Nos enfocamos únicamente en el porqué de la agrupación de tus ViewModels asi de esta forma, con un énfasis en la eficiencia de la programación.
 * Si creamos un ViewModel por tabla, obligamos a la pantalla (Activity/Fragment) a hacer un trabajo innecesario y riesgoso: coordinar, unir y filtrar manualmente los datos de 5 fuentes diferentes. Esto se llama Acoplamiento Rígido y hace que tu código sea difícil de mantener y propenso a errores.
 
 ✅ La Solución: ViewModels agrupados por TAREA o FUNCIÓN
-La mejor práctica de Android (MVVM) es crear ViewModels que sirvan a una tarea completa de la aplicación, como un "plato listo para servir" a la pantalla.
-los ViewModels agrupados actúan como Capataz (Gerente de Campo o encargado de los datos de produccion) y Administrador (Gerente de Oficina o encargado de pagos), haciendo el trabajo pesado de la base de datos por adelantado. La Estructura de ViewModels (4 Clases en lugar de 13).
+La mejor práctica de Android (MVVM) es crear ViewModels que sirvan a una tarea completa de la aplicación, como un "plato listo para servir" a la pantalla. haciendo el trabajo pesado de la base de datos por adelantado. La Estructura de ViewModels (4 Clases en lugar de 13).
 
-1. ProduccionViewModel (El Capataz - Producción)
+1. ProduccionViewModel (El gerente de Producción)
 Función: Entregar todos los datos necesarios para saber qué está pasando en la tierra.
 Resuelve la pregunta: ¿Cuál es el estado actual de este lote?
 Agrupa: Lotes, Campaña, Sembrado, Rendimiento, Incidencia.
@@ -41,16 +42,12 @@ Beneficio: No sobrecargan a los ViewModels principales.
 
 public class ProduccionViewModel extends AndroidViewModel {
 
-    // DAOs necesarios
-    private LoteDao loteDao;
-    private CampañaDao campañaDao;
-    private SembradoDao sembradoDao;
-    private RendimientoDao rendimientoDao;
-    private IncidenciaDao incidenciaDao;
+    // Ahora solo necesitamos el Repositorio, no los DAOs individualmente
+    private ProduccionRepository repository;
 
     // LiveData básicos
     private LiveData<List<Lote>> allLotes;
-    private LiveData<List<Campaña>> allcampañas;
+    private LiveData<List<Campaña>> allCampañas;
     private LiveData<List<Incidencia>> allIncidencias;
 
     // Filtros (Para ver sembrados de un lote específico)
@@ -59,54 +56,62 @@ public class ProduccionViewModel extends AndroidViewModel {
 
     public ProduccionViewModel(@NonNull Application application) {
         super(application);
+
+        // 1. Instanciamos la base de datos
         AppDatabase db = AppDatabase.getDatabase(application);
-        loteDao = db.loteDao();
-        campañaDao = db.campañaDao();
-        sembradoDao = db.sembradoDao();
-        rendimientoDao = db.rendimientoDao();
-        incidenciaDao = db.incidenciaDao();
 
-        // Inicializamos listas generales
-        allLotes = loteDao.getAllLotes();
-        allcampañas = campañaDao.getAllcampañas();
-        allIncidencias = incidenciaDao.getAllIncidencias(); // Asumiendo que devuelve LiveData
+        // 2. Inicializamos el Repositorio pasándole la DB
+        repository = new ProduccionRepository(db);
 
-        // Configuración del filtro: Si cambiamos el ID, se actualiza la lista de sembrados
+        // 3. Obtenemos los datos a través del Repositorio
+        allLotes = repository.getAllLotes();
+        allCampañas = repository.getAllCampañas();
+        allIncidencias = repository.getAllIncidencias();
+
+        // 4. Configuración del filtro llamando al repo
         sembradosDelLote = Transformations.switchMap(filtroLoteId, id ->
-                sembradoDao.getSembradosByLote(id)
+                repository.getSembradosPorLote(id)
         );
     }
-    
+
     // --- GETTERS (Lectura) ---
     public LiveData<List<Lote>> getAllLotes() { return allLotes; }
-    public LiveData<List<Campaña>> getAllcampañas() { return allcampañas; }
+    public LiveData<List<Campaña>> getAllCampañas() { return allCampañas; }
     public LiveData<List<Incidencia>> getAllIncidencias() { return allIncidencias; }
 
-    // Para filtrar sembrados
+    // Filtros
     public void setLoteSeleccionado(int idLote) { filtroLoteId.setValue(idLote); }
     public LiveData<List<Sembrado>> getSembradosFiltrados() { return sembradosDelLote; }
 
-    // Para obtener totales financieros (Rendimiento)
-    public LiveData<Float> getTotalGastado() { return rendimientoDao.getTotalGastadoGlobal(); }
+    // Totales
+    public LiveData<Float> getTotalGastado() { return repository.getTotalGastado(); }
 
-    // --- INSERTS (Escritura en segundo plano) ---
+    // --- INSERTS (Escritura) ---
+    // debemos fijarnos que aquí ya NO usamos 'AppDatabase.databaseWriteExecutor.execute'
+    // porque esa responsabilidad ahora está encapsulada DENTRO del Repositorio.
+
     public void insertLote(Lote lote) {
-        AppDatabase.databaseWriteExecutor.execute(() -> loteDao.insertLote(lote));
+        repository.insertLote(lote);
     }
 
-    public void insertcampaña(Campaña campaña) {
-        AppDatabase.databaseWriteExecutor.execute(() -> campañaDao.insertCampaña(campaña));
+    public void insertCampaña(Campaña campaña) {
+        repository.insertCampaña(campaña);
     }
 
     public void insertSembrado(Sembrado sembrado) {
-        AppDatabase.databaseWriteExecutor.execute(() -> sembradoDao.insertSembrado(sembrado));
+        repository.insertSembrado(sembrado);
+    }
+
+    // Ejemplo de uso de la transacción compleja que creamos en el Repo
+    public void registrarNuevaSiembra(Lote lote, Sembrado sembrado) {
+        repository.registrarNuevaSiembra(lote, sembrado);
     }
 
     public void insertRendimiento(Rendimiento rendimiento) {
-        AppDatabase.databaseWriteExecutor.execute(() -> rendimientoDao.insertRendimiento(rendimiento));
+        repository.insertRendimiento(rendimiento);
     }
 
     public void insertIncidencia(Incidencia incidencia) {
-        AppDatabase.databaseWriteExecutor.execute(() -> incidenciaDao.insertIncidencia(incidencia));
+        repository.insertIncidencia(incidencia);
     }
 }
