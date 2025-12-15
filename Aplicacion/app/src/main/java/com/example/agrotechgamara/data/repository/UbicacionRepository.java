@@ -1,50 +1,62 @@
 package com.example.agrotechgamara.data.repository;
-import androidx.lifecycle.LiveData;
 
-import com.example.agrotechgamara.data.dao.*;
+import androidx.lifecycle.LiveData;
+import com.example.agrotechgamara.data.dao.UbicacionDao;
 import com.example.agrotechgamara.data.database.AppDatabase;
 import com.example.agrotechgamara.data.model.Ubicacion;
 import com.example.agrotechgamara.data.networkapis.GoogleMapsApiService;
 
-// data/repository/UbicacionRepository.java
 public class UbicacionRepository {
 
     private UbicacionDao ubicacionDao;
-    private GoogleMapsApiService mapsService; // Nuestro servicio de mapas
+    private GoogleMapsApiService mapsService;
 
-    public UbicacionRepository(UbicacionDao ubicacionDao, GoogleMapsApiService mapsService) {
-        this.ubicacionDao = ubicacionDao;
-        this.mapsService = mapsService; // Inyección de dependencia
+    // Constructor
+    public UbicacionRepository(AppDatabase db, GoogleMapsApiService mapsService) {
+        this.ubicacionDao = db.ubicacionDao();
+        this.mapsService = mapsService;
     }
 
-    // 1. OBTENER DATOS SIMPLES (DESDE LA DB LOCAL)
+    // --- LECTURA (UI) ---
     public LiveData<Ubicacion> getUbicacionById(int id) {
-        return ubicacionDao.getUbicacionById(id);
+        return ubicacionDao.getUbicacionById(id); // Este devuelve LiveData para la pantalla
     }
 
-    // 2. OBTENER DATOS AVANZADOS (DESDE LA DB Y LA API DE GOOGLE MAPS)
-    // Nota: Esto debe correr en un hilo secundario (Executor)
+    // --- ESCRITURA (Async) ---
+    public void insertUbicacion(Ubicacion ubicacion) {
+        AppDatabase.databaseWriteExecutor.execute(() ->
+                ubicacionDao.insertUbicacion(ubicacion)
+        );
+    }
+
+    // --- LÓGICA MIXTA (DB + API) ---
     public void fetchAdvancedDetails(int idLote, Callback<String> callback) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            // A. Primero, obtenemos la información base de nuestro DB local
-            Ubicacion ubicacion = ubicacionDao.getUbicacionById(idLote).getValue();
+            // A. Obtenemos la ubicación de forma SÍNCRONA (Directa, sin LiveData)
+            // Si usamos el métodoque devuelve LiveData aquí, dará NULL.
+            Ubicacion ubicacion = ubicacionDao.getUbicacionByIdSync(idLote);
 
             if (ubicacion != null) {
-                // B. Luego, usamos la información local para llamar a la API externa
-                String advancedInfo = mapsService.getLoteDetails(ubicacion.getLatitud(), ubicacion.getLongitud());
-
-                // C. Enviamos el resultado a quien nos llamó (el ViewModel)
-                callback.onSuccess(advancedInfo);
+                try {
+                    // B. Validación de seguridad por si el servicio es null
+                    if (mapsService != null) {
+                        String advancedInfo = mapsService.getLoteDetails(ubicacion.getLatitud(), ubicacion.getLongitud());
+                        callback.onSuccess(advancedInfo);
+                    } else {
+                        callback.onError("El servicio de mapas no está configurado.");
+                    }
+                } catch (Exception e) {
+                    callback.onError("Error de red: " + e.getMessage());
+                }
             } else {
-                callback.onError("Ubicación no encontrada.");
+                callback.onError("Ubicación local no encontrada para el ID: " + idLote);
             }
         });
     }
 
-    // Interfaz genérica para manejar el resultado asíncrono
+    // Interfaz para comunicar resultados al ViewModel
     public interface Callback<T> {
         void onSuccess(T result);
         void onError(String error);
     }
-
 }

@@ -17,4 +17,9 @@ public interface UbicacionDao {
 
     @Query("SELECT * FROM ubicacion WHERE idUbicacion = :id")
     LiveData<Ubicacion> getUbicacionById(int id);
+
+    //El que usa el Repositorio internamente (Sin LiveData)
+    @Query("SELECT * FROM ubicacion WHERE idUbicacion = :id")
+    Ubicacion getUbicacionByIdSync(int id);
+
 }

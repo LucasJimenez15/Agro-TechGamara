@@ -16,10 +16,10 @@ import java.util.List;
 /*Agrupa: Lote, Campaña, Sembrado, Rendimiento, Incidencia. Uso: Ideal para la pantalla principal del mapa, detalle
 de lotes y registro de producción.*/
 
-/* 🛑 El Problema: Evitar la "Sobrecarga de la Pantalla" En la aplicación, una sola pantalla (ej., la que muestra toda la info de los lotes, campaña, rendimiento, incidencias, es decir la pantalla de detalles de lote) necesita datos de múltiples tablas a la vez (Lotes, Sembrado, Campaña, Incidencia). Nos enfocamos únicamente en el porqué de la agrupación de tus ViewModels asi de esta forma, con un énfasis en la eficiencia de la programación.
+/* El Problema: Evitar la "Sobrecarga de la Pantalla" En la aplicación, una sola pantalla (ej., la que muestra toda la info de los lotes, campaña, rendimiento, incidencias, es decir la pantalla de detalles de lote) necesita datos de múltiples tablas a la vez (Lotes, Sembrado, Campaña, Incidencia). Nos enfocamos únicamente en el porqué de la agrupación de tus ViewModels asi de esta forma, con un énfasis en la eficiencia de la programación.
 * Si creamos un ViewModel por tabla, obligamos a la pantalla (Activity/Fragment) a hacer un trabajo innecesario y riesgoso: coordinar, unir y filtrar manualmente los datos de 5 fuentes diferentes. Esto se llama Acoplamiento Rígido y hace que tu código sea difícil de mantener y propenso a errores.
 
-✅ La Solución: ViewModels agrupados por TAREA o FUNCIÓN
+La Solución: ViewModels agrupados por TAREA o FUNCIÓN
 La mejor práctica de Android (MVVM) es crear ViewModels que sirvan a una tarea completa de la aplicación, como un "plato listo para servir" a la pantalla. haciendo el trabajo pesado de la base de datos por adelantado. La Estructura de ViewModels (4 Clases en lugar de 13).
 
 1. ProduccionViewModel (El gerente de Producción)
@@ -38,7 +38,7 @@ Beneficio: Cuando registras un pago, este ViewModel se encarga de que se guarde 
 Función: Tareas muy específicas que solo se llaman en momentos puntuales (ej. al abrir el perfil o al grabar un lugar en el GPS).
 Beneficio: No sobrecargan a los ViewModels principales.
 
-🔑 Conclusión: Al agrupar los ViewModels de esta forma, lograremos que el código de pantalla sea mínimo y limpio. La Activity solo da la orden (ej., "muestra el lote 5") y el ViewModel se encarga de la compleja coordinación interna de la base de datos.*/
+Conclusión: Al agrupar los ViewModels de esta forma, lograremos que el código de pantalla sea mínimo y limpio. La Activity solo da la orden (ej., "muestra el lote 5") y el ViewModel se encarga de la compleja coordinación interna de la base de datos.*/
 
 public class ProduccionViewModel extends AndroidViewModel {
 
