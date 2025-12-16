@@ -89,7 +89,7 @@
 
             <!-- Botón Iniciar Sesión -->
             <Button
-                android:id="@+id/LoginBtn"
+                android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Iniciar Sesión"
@@ -117,7 +117,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/LoginBtnRegistrarse"
+                    android:id="@+id/loginBtnRegistrarse"
                     android:fontFamily="@font/montserrat_extrabold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

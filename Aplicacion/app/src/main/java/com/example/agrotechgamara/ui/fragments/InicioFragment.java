@@ -43,6 +43,7 @@ public class InicioFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_login, container, false);
         init(root);
         initListener();
+        return root;
     }
 
     private void init(View view) {
@@ -51,6 +52,7 @@ public class InicioFragment extends Fragment {
 
     public void initListener(){
 
+        /*
         // 1. OBSERVAMOS el resultado de la API de Google Maps
         ubicacionVM.detalleMapaAvanzado.observe(getViewLifecycleOwner(), detalle -> {
             // Este código se ejecuta cuando el Repositorio termina la llamada a la API
@@ -62,7 +64,7 @@ public class InicioFragment extends Fragment {
             int loteIdActual = obtenerIdLoteDeMapa();
             ubicacionVM.solicitarDetalleAvanzado(loteIdActual);
         });
-
+        */
 
     }
 

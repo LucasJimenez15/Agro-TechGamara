@@ -80,7 +80,7 @@ public class ProduccionRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             // Lógica compleja: Quizás actualizar el estado del lote
             // y luego insertar el sembrado.
-            loteDao.updateEstado(lote.getIdLote(), "OCUPADO");
+            // loteDao.updateEstado(lote.getIdLote(), "OCUPADO");
             sembradoDao.insertSembrado(sembrado);
         });
     }

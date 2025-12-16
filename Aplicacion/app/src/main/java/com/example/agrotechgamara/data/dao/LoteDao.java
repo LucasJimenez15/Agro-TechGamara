@@ -25,5 +25,5 @@ public interface LoteDao {
     @Query("SELECT * FROM lotes WHERE idLote = :id")
     LiveData<Lote> getLoteById(int id);
 
-    void updateEstado(int idLote, String estado);
+    //void updateEstado(int idLote, String estado);
 }
