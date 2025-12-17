@@ -9,10 +9,26 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.agrotechgamara.R;
+import com.example.agrotechgamara.ui.viewmodel.AgricultorViewModel;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RegistrarseFragment extends Fragment {
+
+    private EditText registrarseContraseñaText, verifCorreoText, verifCodigoText, registrarseCorreoText, registrarseNombreText
+    private Button registroBtn;
+    private TextView registroBtnInciarSesion;
+    private AgricultorViewModel agricultorViewModel;
+
+    // Executor para manejar la tarea en segundo plano
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();*/
+
 
     public RegistrarseFragment() {
         // Required empty public constructor
