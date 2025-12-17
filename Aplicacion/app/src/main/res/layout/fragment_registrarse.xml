@@ -7,7 +7,7 @@
     tools:context=".ui.fragments.RegistrarseFragment">
 
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F7FFF5">
@@ -41,7 +41,7 @@
                     android:fontFamily="@font/montserrat_extrabold"
                     android:text="Registrarse"
                     android:textColor="@color/black"
-                    android:textSize="25sp"/>
+                    android:textSize="22sp"/>
             </LinearLayout>
 
             <!-- Campo nombre -->
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:padding="10dp"
+                android:padding="15dp"
                 app:hintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black"
@@ -64,7 +64,7 @@
                     android:textSize="20sp"
                     android:layout_margin="5dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:inputType="textEmailAddress"
+                    android:inputType="text"
                     android:textColor="@color/black"
                     android:background="@drawable/style_edittext"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:padding="10dp"
+                android:padding="15dp"
                 app:hintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black"
@@ -103,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:padding="10dp"
+                android:padding="15dp"
                 app:hintEnabled="true"
                 app:hintTextColor="@color/black"
                 android:hint="Ingresa una contraseña"
@@ -130,56 +130,41 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="Codigo de verificacion"
-                android:layout_margin="10dp"
+                android:layout_marginStart="30dp"
                 android:textColor="@color/black"
                 android:textSize="16sp">
             </TextView>
 
-            <!-- Campo Email verif -->
+            <!-- verificacion de cuenta-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/verifCorreoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:padding="10dp"
-                app:hintEnabled="true"
+                android:padding="17dp"
                 android:gravity="center"
+                android:hint="Ingrese un email"
+                android:textColorHint="#4A662C"
+
+                app:hintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black"
-                android:hint="Ingrese su email"
-                android:textColorHint="#4A662C">
 
-                <!-- CONTENEDOR HORIZONTAL -->
-                <LinearLayout
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                app:endIconMinSize="70dp"
+                app:endIconDrawable="@drawable/flechaverif"
+                app:endIconContentDescription="Verificar correo">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/verifCorreoText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <!-- EDITTEXT (IZQUIERDA) -->
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/verifCorreoText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="20sp"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:inputType="textEmailAddress"
-                        android:textColor="@color/black"
-                        android:text="Ingrese su email"
-                        android:background="@drawable/style_edittext"/>
-
-                    <!-- IMAGEN DE LA FLECHA -->
-                    <ImageView
-                        android:id="@+id/verifFlecha"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="8dp"
-                        android:padding="10dp"
-                        android:src="@drawable/flechaverif"
-                        android:background="@drawable/style_edittext"/>
-
-                </LinearLayout>
+                    android:textSize="20sp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:background="@drawable/style_edittext"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -190,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:padding="10dp"
+                android:padding="15dp"
                 app:hintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black"
@@ -216,7 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Crear cuenta"
-                android:layout_margin="30dp"
+                android:layout_margin="20dp"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -235,7 +220,7 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¿ya tienes una cuenta?"
+                    android:text="¿ Ya tienes una cuenta ?"
                     android:textColor="#263C1A"
                     android:textSize="18sp" />
 
@@ -252,7 +237,7 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 
