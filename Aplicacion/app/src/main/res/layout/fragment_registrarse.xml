@@ -26,10 +26,10 @@
 
                 <!-- Flecha a la izquierda -->
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/flecha_atras"
-                    android:layout_margin="30dp"/>
+                    android:layout_margin="35dp" />
 
                 <!-- Texto centrado -->
                 <TextView
@@ -40,7 +40,6 @@
                     android:gravity="center"
                     android:fontFamily="@font/montserrat_extrabold"
                     android:text="Registrarse"
-                    android:layout_marginTop="8dp"
                     android:textColor="@color/black"
                     android:textSize="25sp"/>
             </LinearLayout>
@@ -140,13 +139,15 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/verifCorreoLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginTop="5dp"
                 android:padding="10dp"
-                android:hint="Ingrese su email"
                 app:hintEnabled="true"
+                android:gravity="center"
                 app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black">
+                app:hintTextColor="@color/black"
+                android:hint="Ingrese su email"
+                android:textColorHint="#4A662C">
 
                 <!-- CONTENEDOR HORIZONTAL -->
                 <LinearLayout
@@ -171,10 +172,11 @@
                     <!-- IMAGEN DE LA FLECHA -->
                     <ImageView
                         android:id="@+id/verifFlecha"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_marginStart="8dp"
-                        android:src="@drawable/flecha_atras"
+                        android:padding="10dp"
+                        android:src="@drawable/flechaverif"
                         android:background="@drawable/style_edittext"/>
 
                 </LinearLayout>
@@ -182,19 +184,71 @@
 
 
 
+            <!-- Campo de ingreso del codigo -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/verifCodigoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                android:padding="10dp"
+                app:hintEnabled="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/black"
+                android:hint="Ingrese el codigo"
+                android:textColorHint="#4A662C">
 
-            <!-- Botón Iniciar Sesión -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/verifCodigoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:layout_margin="5dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:background="@drawable/style_edittext"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Botón crear -->
             <Button
-                android:id="@+id/loginBtn"
+                android:id="@+id/registroBtn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Iniciar Sesión"
+                android:text="Crear cuenta"
                 android:layout_margin="30dp"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/montserrat_regular"
+                android:fontFamily="@font/montserrat_extrabold"
                 android:backgroundTint="@color/VerdeBoton"/>
+
+
+            <!-- Texto inferior con enlace -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿ya tienes una cuenta?"
+                    android:textColor="#263C1A"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/registroBtnInciarSesion"
+                    android:fontFamily="@font/montserrat_extrabold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="   Inicia sesion"
+                    android:textStyle="bold"
+                    android:textColor="#5E964F"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
