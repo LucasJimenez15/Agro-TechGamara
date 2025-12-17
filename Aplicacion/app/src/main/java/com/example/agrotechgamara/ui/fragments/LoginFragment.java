@@ -66,8 +66,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(
-                                R.anim.slide_in,  // enter
-                                R.anim.slide_out  // exit
+                                R.anim.entrada,  // enter
+                                R.anim.salida  // exit
                         ).replace(R.id.fragmentContainerView, RegistrarseFragment.newInstance())
                         .commit();
             }
