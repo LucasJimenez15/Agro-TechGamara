@@ -3,44 +3,50 @@ package com.example.agrotechgamara.ui.viewmodel;
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import com.example.agrotechgamara.data.database.AppDatabase;
-import com.example.agrotechgamara.data.model.Agricultor;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import com.example.agrotechgamara.data.repository.AgricultorRepository; // Importamos el Repo
-
-/*Aquí hacemos un cambio importante. En lugar de ejecutar una búsqueda manual en un hilo secundario (que es difícil de devolver a la UI), usamos un patrón Reactivo.
-Tenemos un "Trigger" (filtroEmail). Cuando seteamos el email, el LiveData de resultado (usuarioResult) se actualiza automáticamente gracias al Repositorio.*/
+import com.example.agrotechgamara.data.database.AppDatabase;
+import com.example.agrotechgamara.data.model.Agricultor;
+import com.example.agrotechgamara.data.repository.AgricultorRepository;
 
 public class AgricultorViewModel extends AndroidViewModel {
 
+    // 1. EL REPOSITORIO: Nuestro único punto de acceso a los datos (DB o Nube)
     private AgricultorRepository repository;
 
-    // Lógica para el Login / Búsqueda
-    // 1. El "gatillo": Aquí ponemos el email que queremos buscar
+    // 2. EL "GATILLO" (Trigger):
+    // Imagina esto como una caja de búsqueda vacía.
+    // La UI (Fragment) escribirá el email aquí.
+    // Es 'Mutable' porque nosotros (la UI) podemos cambiar su valor.
     private MutableLiveData<String> filtroEmail = new MutableLiveData<>();
 
-    // 2. El "resultado": Observa el gatillo y pide los datos al repositorio
+    // 3. EL "RESULTADO" (Output):
+    // La UI observará esta variable. Cuando el 'Gatillo' cambie,
+    // esta variable se actualizará sola con el agricultor encontrado.
     private LiveData<Agricultor> usuarioResult;
 
     public AgricultorViewModel(@NonNull Application application) {
         super(application);
 
-        // Inicializamos Repositorio
+        // Inicializamos la DB y el Repositorio
         AppDatabase db = AppDatabase.getDatabase(application);
         repository = new AgricultorRepository(db);
 
-        // Configuración Reactiva:
-        // Cada vez que 'filtroEmail' cambie, se llama a repository.getAgricultorByEmail()
+        // 4. LA MAGIA REACTIVA (SwitchMap):
+        // Aquí conectamos el GATILLO con el RESULTADO.
+        // Se lee así: "Cada vez que 'filtroEmail' cambie, ejecuta 'repository.getAgricultorByEmail'
+        // y pon el resultado dentro de 'usuarioResult'".
         usuarioResult = Transformations.switchMap(filtroEmail, email ->
                 repository.getAgricultorByEmail(email)
         );
     }
 
-    // --- ACCIONES (La UI llama a esto) ---
+    // --- MÉTODOS DE ACCIÓN (La UI los llama) ---
 
+    // Método para GUARDAR un nuevo usuario
     public void registrarAgricultor(Agricultor agricultor) {
+        // Delegamos al repositorio (él se encarga de los hilos/background)
         repository.registrarAgricultor(agricultor);
     }
 
@@ -48,34 +54,15 @@ public class AgricultorViewModel extends AndroidViewModel {
         repository.actualizarPerfil(agricultor);
     }
 
-    // LOGIN: Paso 1 - La Vista llama a esto con el email escrito en el EditText
+    // --- MÉTODOS PARA EL LOGIN / BÚSQUEDA ---
+
+    // Paso A: La UI llama a esto cuando el usuario escribe el email y da click en "Buscar"
     public void buscarPorEmail(String email) {
-        filtroEmail.setValue(email);
+        filtroEmail.setValue(email); // Al hacer esto, el SwitchMap (arriba) se dispara automáticamente.
     }
 
-    // LOGIN: Paso 2 - La Vista observa esto para saber si encontró al usuario
+    // Paso B: La UI observa esto para ver qué encontró el SwitchMap
     public LiveData<Agricultor> getResultadoBusqueda() {
         return usuarioResult;
     }
 }
-
-/*¿Cómo usar este Login en tu Activity?
-Con esta estructura mejorada, tu código en la pantalla de Login (LoginActivity) sería así de limpio:
-En LoginActivity.java
-
-// 1. Observar el resultado
-agricultorViewModel.getResultadoBusqueda().observe(this, agricultor -> {
-    if (agricultor != null) {
-        // ¡Usuario encontrado! Ir a la pantalla principal
-        iniciarSesion(agricultor);
-    } else {
-        // Usuario no existe en la DB
-        mostrarError("Email no registrado");
-    }
-});
-
-// 2. Cuando el usuario presiona el botón "Ingresar"
-botonLogin.setOnClickListener(v -> {
-    String email = inputEmail.getText().toString();
-    agricultorViewModel.buscarPorEmail(email); // Esto dispara la observación de arriba
-});*/
