@@ -100,6 +100,7 @@ public class RegistrarseFragment extends Fragment {
 
     }
 
+
     private void realizarRegistro() {
         // A. Obtener datos de los EditText
         String nombre = registrarseNombreText.getText().toString().trim();
@@ -152,6 +153,7 @@ public class RegistrarseFragment extends Fragment {
                 return;
             }
         }
+
 
         // C. Crear el objeto Agricultor
         Agricultor nuevoAgricultor = new Agricultor();

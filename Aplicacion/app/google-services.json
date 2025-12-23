@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "85778134090",
+    "project_id": "agrotech-gamara",
+    "storage_bucket": "agrotech-gamara.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85778134090:android:a7f30002cf40cfac85e2b3",
+        "android_client_info": {
+          "package_name": "com.example.agrotechgamara"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtxvZCg_s3W7oa_Adxee-lGK4C0TCI_x8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
