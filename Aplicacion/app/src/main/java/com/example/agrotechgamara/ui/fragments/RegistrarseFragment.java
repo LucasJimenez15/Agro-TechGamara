@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class RegistrarseFragment extends Fragment {
     private EditText registrarseContraseñaText, verifCorreoText, verifCodigoText, registrarseCorreoText, registrarseNombreText;
     private Button registroBtn;
     private TextView registroBtnInciarSesion;
+    private ImageView volverIconoRegistrarse;
 
     // Nuestro ViewModel
     private AgricultorViewModel agricultorViewModel;
@@ -75,6 +77,7 @@ public class RegistrarseFragment extends Fragment {
         registrarseNombreText = root.findViewById(R.id.registrarseNombreText);
         registroBtn = root.findViewById(R.id.registroBtn);
         registroBtnInciarSesion = root.findViewById(R.id.registroBtnInciarSesion);
+        volverIconoRegistrarse = root.findViewById(R.id.volverIconoRegistrarse);
 
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()' si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
         agricultorViewModel = new ViewModelProvider(this).get(AgricultorViewModel.class);
@@ -84,10 +87,16 @@ public class RegistrarseFragment extends Fragment {
             realizarRegistro();
         });
 
-        // 5. (Opcional) Configurar botón para ir a Login
+        // 5. ir a Login
         registroBtnInciarSesion.setOnClickListener(v -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
         });
+
+        // 5. Volver
+        volverIconoRegistrarse.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
+        });
+
 
     }
 
@@ -96,11 +105,52 @@ public class RegistrarseFragment extends Fragment {
         String nombre = registrarseNombreText.getText().toString().trim();
         String correo = registrarseCorreoText.getText().toString().trim();
         String pass = registrarseContraseñaText.getText().toString().trim();
+        String codigoVerif = verifCodigoText.getText().toString().trim();
+        String correoVerif = verifCorreoText.getText().toString().trim();
 
         // B. Validaciones básicas
-        if (nombre.isEmpty() || correo.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(getContext(), "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
+        if (nombre.isEmpty() || correo.isEmpty() || pass.isEmpty() || codigoVerif.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor debe de completar todos los campos", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        // 1. VALIDACIÓN DE EMAIL
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+            registrarseCorreoText.setError("Por favor, ingresa un correo electrónico válido");
+            registrarseCorreoText.requestFocus(); // Pone el cursor en el error
+            return;
+        }
+
+        // 2. VALIDACION DE CONTRASEÑA PARA SU LONGITUD (Opcional pero recomendado)
+        if (pass.length() < 6) {
+            registrarseContraseñaText.setError("La contraseña debe tener al menos 6 caracteres");
+            registrarseContraseñaText.requestFocus(); // Pone el cursor en el error
+            return;
+        }
+
+
+        // 3. VALIDACIÓN DE EMAIL PARA OBTENER CODIGO
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correoVerif).matches()) {
+            Toast.makeText(getContext(), "Por favor, ingrese un correo valido para obtener el codigo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 4. Verificar que el codigo sea valido y no esté vacío antes de convertir
+        int cod = 0; // Valor por defecto
+        if (!codigoVerif.isEmpty()) {
+            try {
+                // 3. Convertir el String a int
+                cod = Integer.parseInt(codigoVerif);
+
+                /*Hacer aqui la logica para verificar que sea el codigo que se envio realmente al email
+                agregarlo a la base de datos mas abajo*/
+
+            } catch (Exception e) {
+                // Si el usuario escribió algo que no es un número válido
+                verifCodigoText.setError("Código de verificacion no válido");
+                verifCodigoText.setText("");
+                return;
+            }
         }
 
         // C. Crear el objeto Agricultor
@@ -108,6 +158,7 @@ public class RegistrarseFragment extends Fragment {
         nuevoAgricultor.setNomAgricultor(nombre);
         nuevoAgricultor.setEmailAgricultor(correo);
         nuevoAgricultor.setContaAgricultor(pass); // En una app real, ¡encripta la contraseña!
+        //-------falta agregar el codigo de inicio de sesion--------
 
         // D. Guardar usando el ViewModel
         agricultorViewModel.registrarAgricultor(nuevoAgricultor);
@@ -116,7 +167,11 @@ public class RegistrarseFragment extends Fragment {
 
         // E. Navegar a la siguiente pantalla (Home o Login)
         NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
+
     }
+
+
+
 
     /*¿Cómo usaría la parte de "Búsqueda Reactiva" en este Fragmento de Registro?
 Si quisieras verificar si el correo ya existe antes de registrarlo, podrías usar la lógica que explicamos en la Parte 1 dentro del métodoinit:*/

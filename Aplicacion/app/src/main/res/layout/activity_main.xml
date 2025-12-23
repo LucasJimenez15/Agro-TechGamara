@@ -6,18 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="#fff"
-    app:defaultNavHost="true"
-    app:navGraph="@navigation/mobile_navigation">
+    android:background="#fff">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.agrotechgamara.ui.fragments.LoginFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/mobile_navigation"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--
+    *Nota: No hay que preocuparse si no vemos el LoginFragment en la vista previa del diseño, aparecerá al ejecutar la app porque está definido como `startDestination` en el `mobile_navigation.xml`.*
+
+    ### Tenia un Error: Navegación Manual en `LoginFragment.java`
+
+    En el código Java, usabamos `beginTransaction().replace(...)`. Esto **destruye** el sistema de navegación. Al hacer un reemplazo manual de los fragmentos, se expulsa al `NavHost` y ponemos un fragmento "tonto" en su lugar. Por eso, cuando ese nuevo fragmento intenta buscar el `NavController`, no lo encuentra y la app se cierra.
+
+    en el loginFragment se usa el `NavController` para navegar, no el `FragmentManager`.
+    -->

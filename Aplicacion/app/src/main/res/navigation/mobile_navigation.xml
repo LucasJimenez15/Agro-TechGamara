@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/loginFragment">
     <activity
         android:id="@+id/splashScreen"
         android:name="com.example.agrotechgamara.ui.activitys.SplashScreen"
@@ -13,10 +13,14 @@
         android:id="@+id/loginFragment"
         android:name="com.example.agrotechgamara.ui.fragments.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registrarseFragment"
-            app:destination="@id/registrarseFragment" />
+            app:destination="@id/registrarseFragment"
+            app:enterAnim="@anim/entrada"
+            app:exitAnim="@anim/salida"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/registrarseFragment"
@@ -25,6 +29,10 @@
         tools:layout="@layout/fragment_registrarse" >
         <action
             android:id="@+id/action_registrarse_to_login"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/entrada"
+            app:exitAnim="@anim/salida"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
 </navigation>
