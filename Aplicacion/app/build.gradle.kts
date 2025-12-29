@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation ("androidx.room:room-runtime:2.6.1")
+    implementation(libs.firebase.auth)
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
     implementation(libs.annotation)
     implementation(libs.lifecycle.livedata.ktx)
