@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.agrotechgamara.R;
 import com.example.agrotechgamara.data.model.Agricultor;
 import com.example.agrotechgamara.ui.viewmodel.AgricultorViewModel;
@@ -26,13 +28,16 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /*PARA VALIDAR LOS CAMPOS SE PUEDE USAR LA LIBRERIA AWESOMEVALIDATTION QUE LE HICE UN FORK EN GITHUB
-* ES MUY UTIL YA QUE TIENE LAS VALIDACIONES NECESARIAS PARA LOS CAMPOS, EN ESTE CASO LO HICE CON IFS Y CODIGO BASICO
-* CON LA LIBRERIA PATTERNS DE JAVA*/
+ * ES MUY UTIL YA QUE TIENE LAS VALIDACIONES NECESARIAS PARA LOS CAMPOS, EN ESTE CASO LO HICE CON IFS Y CODIGO BASICO
+ * CON LA LIBRERIA PATTERNS DE JAVA*/
 
 public class RegistrarseFragment extends Fragment {
 
@@ -40,11 +45,12 @@ public class RegistrarseFragment extends Fragment {
     private EditText registrarseContraseñaText, verifCorreoText, verifCodigoText, registrarseCorreoText, registrarseNombreText;
     private Button registroBtn;
     private TextView registroBtnInciarSesion;
-    private ImageView volverIconoRegistrarse;
-    FirebaseAuth firebaseAuth;
-
-    // Nuestro ViewModel
-    private AgricultorViewModel agricultorViewModel;
+    private ImageView volverIconoRegistrarse,btnEnviarCodigo;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore db; // Para el envío de correos
+    private String codigoGenerado = null;
+    private AgricultorViewModel agricultorViewModel; // Nuestro ViewModel
+    private String emailParaVerificar = ""; // Guardamos el email al que enviamos el código
 
     public RegistrarseFragment() {
         // Required empty public constructor
@@ -89,35 +95,38 @@ public class RegistrarseFragment extends Fragment {
         registroBtn = root.findViewById(R.id.registroBtn);
         registroBtnInciarSesion = root.findViewById(R.id.registroBtnInciarSesion);
         volverIconoRegistrarse = root.findViewById(R.id.volverIconoRegistrarse);
+        btnEnviarCodigo = root.findViewById(R.id.btnEnviarCodigo);
 
-        /*Aqui se inicializa una instancia de firebase para poder almacenar el usuario, correo o el inicio de sesion por asi decirlo del usuario*/
+        /*Aqui se inicializa una instancia de firebase auth y de firebase firestore para poder almacenar el usuario, correo o el inicio de sesion
+        por asi decirlo del usuario*/
         firebaseAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()'
         si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
         agricultorViewModel = new ViewModelProvider(this).get(AgricultorViewModel.class);
 
         // Observamos si el usuario ya existe
-                agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
-                    if (agricultorEncontrado != null) {
-                        // Si entra aquí, significa que el email YA EXISTE en la base de datos
-                        registrarseCorreoText.setError("Este correo ya está registrado");
-                        registroBtn.setEnabled(false); // Desactivamos el botón
-                    } else {
-                        // El correo está libre
-                        registrarseCorreoText.setError(null);
-                        registroBtn.setEnabled(true);
-                    }
-                });
+        agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
+            if (agricultorEncontrado != null) {
+                // Si entra aquí, significa que el email YA EXISTE en la base de datos
+                registrarseCorreoText.setError("Este correo ya está registrado");
+                registroBtn.setEnabled(false); // Desactivamos el botón
+            } else {
+                // El correo está libre
+                registrarseCorreoText.setError(null);
+                registroBtn.setEnabled(true);
+            }
+        });
 
         // Listener para cuando el usuario termina de escribir el correo (Focus change)
-                registrarseCorreoText.setOnFocusChangeListener((v, hasFocus) -> {
-                    if (!hasFocus) { // Cuando pierde el foco (terminó de escribir)
-                        String email = registrarseCorreoText.getText().toString();
-                        // Disparamos el Gatillo para verificar
-                        agricultorViewModel.buscarPorEmail(email);
-                    }
-                });
+        registrarseCorreoText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) { // Cuando pierde el foco (terminó de escribir)
+                String email = registrarseCorreoText.getText().toString();
+                // Disparamos el Gatillo para verificar
+                agricultorViewModel.buscarPorEmail(email);
+            }
+        });
 
         // 4. Configurar el botón de REGISTRO
         registroBtn.setOnClickListener(v -> {
@@ -129,11 +138,23 @@ public class RegistrarseFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
         });
 
-        // 5. Volver
+        // 6. Volver
         volverIconoRegistrarse.setOnClickListener(v -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
         });
 
+        // 7. verificacion
+        // Lógica del botón de verificacion (Solo envía el código)
+        btnEnviarCodigo.setOnClickListener(v -> {
+            String email = verifCorreoText.getText().toString().trim();
+
+            if (!email.isEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailParaVerificar = email; // Guardamos el email destino
+                prepararVerificacion(email);
+            } else {
+                verifCorreoText.setError("Ingresa un email válido para recibir el código");
+            }
+        });
 
     }
 
@@ -173,51 +194,59 @@ public class RegistrarseFragment extends Fragment {
             return;
         }
 
-        // 4. Verificar que el codigo sea valido y no esté vacío antes de convertir
-        int cod = 0; // Valor por defecto
-        if (!codigoVerif.isEmpty()) {
-            try {
-                // 3. Convertir el String a int
-                cod = Integer.parseInt(codigoVerif);
-
-                /*Hacer aqui la logica para verificar que sea el codigo que se envio realmente al email
-                agregarlo a la base de datos mas abajo*/
-
-            } catch (Exception e) {
-                // Si el usuario escribió algo que no es un número válido
-                verifCodigoText.setError("Código de verificacion no válido");
-                verifCodigoText.setText("");
-                return;
-            }
+        // 4. VERIFICACION DEL CODIGO INGRESADO
+        if (codigoVerif.equals(codigoGenerado)) {
+            // EL CÓDIGO ES CORRECTO -> Crear usuario en Firebase Auth y local
+            registrarEnFirebaseYLocal(nombre, correo, pass);
+        } else {
+            verifCodigoText.setError("El código ingresado es incorrecto");
+            verifCodigoText.requestFocus();
         }
-
-        // C. Crear el objeto Agricultor
-        Agricultor nuevoAgricultor = new Agricultor();
-        nuevoAgricultor.setNomAgricultor(nombre);
-        nuevoAgricultor.setEmailAgricultor(correo);
-        nuevoAgricultor.setContaAgricultor(pass); // En una app real, ¡encripta la contraseña!
-        //-------falta agregar el codigo de inicio de sesion--------
-
-        // D. Guardar usando el ViewModel
-        agricultorViewModel.registrarAgricultor(nuevoAgricultor);
-
-        //aqui almacenamos el inicio de sesion en firebase tambien
-        firebaseAuth.createUserWithEmailAndPassword(correo,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                }else{
-                    String errorcode = ((FirebaseAuthException)task.getException()).getErrorCode();
-                    dameToastdeerror(errorcode);
-                }
-            }
-        });
-
-        // E. Navegar a la siguiente pantalla (Home o Login)
-        NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
-
     }
+
+    private void registrarEnFirebaseYLocal(String nombre, String correo, String pass) {
+        firebaseAuth.createUserWithEmailAndPassword(correo, pass)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Paso A: Guardar en base de datos local
+                        Agricultor nuevo = new Agricultor();
+                        nuevo.setNomAgricultor(nombre);
+                        nuevo.setEmailAgricultor(correo);
+                        nuevo.setContaAgricultor(pass);
+                        agricultorViewModel.registrarAgricultor(nuevo);
+
+                        Toast.makeText(getContext(), "¡Bienvenido, " + nombre + "!", Toast.LENGTH_SHORT).show();
+                        irALogin();
+                    } else {
+                        // Error de Firebase (ej. correo ya en uso en la nube)
+                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                        dameToastdeerror(errorCode);
+                    }
+                });
+    }
+
+    private void prepararVerificacion(String email) {
+        // Generar código aleatorio
+        codigoGenerado = String.valueOf((int) (Math.random() * 900000) + 100000);
+
+        Map<String, Object> mail = new HashMap<>();
+        mail.put("to", email);
+
+        Map<String, Object> message = new HashMap<>();
+        message.put("subject", "Tu código de verificación de AgroTech");
+        message.put("html", "<h1>Bienvenido</h1><p>Tu código es: <b>" + codigoGenerado + "</b></p>");
+        mail.put("message", message);
+
+        // IMPORTANTE: Se usa 'db' (Firestore), no firebaseAuth
+        db.collection("mail").add(mail)
+                .addOnSuccessListener(ref -> Toast.makeText(getContext(), "Código enviado a " + email, Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al enviar correo", Toast.LENGTH_SHORT).show());
+    }
+
+    private void irALogin() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_registrarse_to_login);
+    }
+
 
     public void dameToastdeerror(String error) {
 

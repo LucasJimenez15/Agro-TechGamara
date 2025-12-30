@@ -137,36 +137,49 @@
             </TextView>
 
             <!-- verificacion de cuenta-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/verifCorreoLayout"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:padding="17dp"
-                android:gravity="center"
-                android:hint="Ingrese un email"
-                android:textColorHint="#4A662C"
+                android:paddingHorizontal="17dp">
 
-                app:hintEnabled="true"
-                app:hintAnimationEnabled="true"
-                app:hintTextColor="@color/black"
-
-                app:endIconMode="custom"
-                app:endIconTint="@color/black"
-                app:endIconMinSize="70dp"
-                app:endIconDrawable="@drawable/flechaverifconfondo"
-                app:endIconContentDescription="Verificar correo">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/verifCorreoText"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/verifCorreoLayout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/style_edittext"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Ingrese un email"
+                    android:textColorHint="#4A662C"
+                    app:hintTextColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnEnviarCodigo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/verifCorreoText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/style_edittext"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginEnd="10dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/btnEnviarCodigo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="5dp"
+                    android:src="@drawable/flechaverifconfondo"
+                    app:layout_constraintBottom_toBottomOf="@+id/verifCorreoLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/verifCorreoLayout" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
@@ -180,7 +193,7 @@
                 app:hintEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextColor="@color/black"
-                android:hint="Ingrese el codigo"
+                android:hint="Ingrese el codigo recibido"
                 android:textColorHint="#4A662C">
 
                 <com.google.android.material.textfield.TextInputEditText
