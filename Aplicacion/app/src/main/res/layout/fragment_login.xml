@@ -36,6 +36,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp" />
 
+            <!-- Texto inferior con enlace -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:fontFamily="@font/montserrat_extrabold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bienvenido a Agro Tech Gamara"
+                    android:textColor="#5E964F"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
             <!-- Campo Correo Electronico -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/LoginEmail"
@@ -91,15 +108,29 @@
             <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="70dp"
                 android:text="Iniciar Sesión"
                 android:layout_margin="30dp"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/montserrat_regular"
+                android:fontFamily="@font/montserratbold"
                 android:backgroundTint="@color/VerdeBoton"/>
 
+            <!-- Botón Iniciar Sesión -->
+            <Button
+                android:id="@+id/loginOlvidosucontra"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:text="Olvide mi contraseña"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/montserratbold"
+                android:backgroundTint="@color/VerdeBoton"/>
 
             <!-- Texto inferior con enlace -->
             <LinearLayout
@@ -127,7 +158,17 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
+            <ImageView
+                android:id="@+id/logoGoogle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/googlelogo"
+                android:layout_margin="30dp"
+                android:layout_gravity="center">
+            </ImageView>
+
         </LinearLayout>
+
 
     </ScrollView>
 

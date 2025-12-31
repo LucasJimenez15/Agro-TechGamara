@@ -98,13 +98,13 @@ public class RegistrarseFragment extends Fragment {
         btnEnviarCodigo = root.findViewById(R.id.btnEnviarCodigo);
 
         /*Aqui se inicializa una instancia de firebase auth y de firebase firestore para poder almacenar el usuario, correo o el inicio de sesion
-        por asi decirlo del usuario*/
+        por asi decirlo del usuario y ademas el uso de el envio de emails*/
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()'
-        si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
-        agricultorViewModel = new ViewModelProvider(this).get(AgricultorViewModel.class);
+        si queremos compartir el VM con otros fragments, o 'this' si es solo para este. En este caso compartimos entre registrse y login fragment*/
+        agricultorViewModel = new ViewModelProvider(requireActivity()).get(AgricultorViewModel.class);
 
         // Observamos si el usuario ya existe
         agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
@@ -233,14 +233,17 @@ public class RegistrarseFragment extends Fragment {
         mail.put("to", email);
 
         Map<String, Object> message = new HashMap<>();
-        message.put("subject", "Tu código de verificación de AgroTech");
+        message.put("subject", "Tu código de verificación para AgroTechGamara");
         message.put("html", "<h1>Bienvenido</h1><p>Tu código es: <b>" + codigoGenerado + "</b></p>");
         mail.put("message", message);
 
         // IMPORTANTE: Se usa 'db' (Firestore), no firebaseAuth
         db.collection("mail").add(mail)
                 .addOnSuccessListener(ref -> Toast.makeText(getContext(), "Código enviado a " + email, Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(ref -> verifCorreoText.setText(""))
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al enviar correo", Toast.LENGTH_SHORT).show());
+
+
     }
 
     private void irALogin() {
