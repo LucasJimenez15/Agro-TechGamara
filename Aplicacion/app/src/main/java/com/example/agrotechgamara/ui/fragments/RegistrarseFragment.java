@@ -242,8 +242,6 @@ public class RegistrarseFragment extends Fragment {
                 .addOnSuccessListener(ref -> Toast.makeText(getContext(), "Código enviado a " + email, Toast.LENGTH_SHORT).show())
                 .addOnSuccessListener(ref -> verifCorreoText.setText(""))
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al enviar correo", Toast.LENGTH_SHORT).show());
-
-
     }
 
     private void irALogin() {

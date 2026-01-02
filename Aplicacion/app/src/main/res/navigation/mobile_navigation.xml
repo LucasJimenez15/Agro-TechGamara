@@ -21,6 +21,13 @@
             app:exitAnim="@anim/salida"
             app:popEnterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_loginFragment_to_inicioFragment"
+            app:destination="@id/inicioFragment"
+            app:enterAnim="@anim/entrada"
+            app:exitAnim="@anim/salida"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/registrarseFragment"
@@ -34,5 +41,11 @@
             app:exitAnim="@anim/salida"
             app:popEnterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/inicioFragment"
+        android:name="com.example.agrotechgamara.ui.fragments.InicioFragment"
+        android:label="fragment_inicio"
+        tools:layout="@layout/fragment_inicio">
     </fragment>
 </navigation>
