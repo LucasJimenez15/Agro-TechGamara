@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -117,19 +118,23 @@ public class LoginFragment extends Fragment {
     }
 
     private void realizarLogin(View view) {
+
+        String email = loginEditTextEmail.getText().toString();
+        String contra = loginEditTextPassword.getText().toString();
+
+        agricultorViewModel.buscarPorEmail(email);
+
         // Observamos si el usuario ya existe
         agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
             if (agricultorEncontrado != null) {
                 // Si entra aquí, significa que el email YA EXISTE en la base de datos
-
-                String email = loginEditTextEmail.getText().toString();
-                String contra = loginEditTextPassword.getText().toString();
 
                 firebaseAuth.signInWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             irainicio(email, contra, view);
+                            Toast.makeText(getContext(), "Bienvenido "+ agricultorEncontrado.getNomAgricultor()+"!!", Toast.LENGTH_SHORT).show();
                         } else {
                             // Error de Firebase (ej. correo ya en uso en la nube)
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -137,20 +142,30 @@ public class LoginFragment extends Fragment {
                         }
                     }
                 });
+            }else{
+                Toast.makeText(getContext(), "No se encontro el usuario", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void irainicio(String email, String contra, View view) {
-        // 1. Creamos el paquete (Bundle)
-        Bundle bundle = new Bundle();
 
-        // 2. Agregamos la información (Clave, Valor)
-        bundle.putString("email_agricultor", email);
-        bundle.putString("contra_agricultor", contra);
+        NavController navController = Navigation.findNavController(requireView());
 
-        //3. Enviamostodo al fragment de inicio
-        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_inicioFragment, bundle);
+        // Verificamos si el destino actual es realmente el Login antes de intentar salir de él
+        if (navController.getCurrentDestination() != null &&
+                navController.getCurrentDestination().getId() == R.id.loginFragment) {
+
+            // 1. Creamos el paquete (Bundle)
+            Bundle bundle = new Bundle();
+            // 2. Agregamos la información (Clave, Valor)
+            bundle.putString("email_agricultor", email);
+            bundle.putString("contra_agricultor", contra);
+            //3. Enviamostodo al fragment de inicio
+            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_inicioFragment, bundle);
+
+        }
+
 
         /*Conceptos clave
         Bundle: Es una clase de Android diseñada para transportar datos a través de procesos y componentes.

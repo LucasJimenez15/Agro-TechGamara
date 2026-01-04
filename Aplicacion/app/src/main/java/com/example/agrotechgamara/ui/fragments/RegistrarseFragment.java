@@ -240,7 +240,6 @@ public class RegistrarseFragment extends Fragment {
         // IMPORTANTE: Se usa 'db' (Firestore), no firebaseAuth
         db.collection("mail").add(mail)
                 .addOnSuccessListener(ref -> Toast.makeText(getContext(), "Código enviado a " + email, Toast.LENGTH_SHORT).show())
-                .addOnSuccessListener(ref -> verifCorreoText.setText(""))
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Error al enviar correo", Toast.LENGTH_SHORT).show());
     }
 

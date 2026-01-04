@@ -31,11 +31,6 @@
                     android:src="@drawable/logo_app" />
             </LinearLayout>
 
-            <!-- ESPACIO -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="80dp" />
-
             <!-- Texto inferior con enlace -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,7 +78,6 @@
                 android:id="@+id/LoginContraseña"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="10dp"
                 android:padding="10dp"
                 app:hintEnabled="true"
                 app:hintTextColor="#4A662C"
@@ -163,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/googlelogo"
-                android:layout_margin="30dp"
+                android:layout_margin="10dp"
                 android:layout_gravity="center">
             </ImageView>
 
