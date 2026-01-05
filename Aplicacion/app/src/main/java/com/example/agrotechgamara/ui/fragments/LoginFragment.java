@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginFragment extends Fragment {
@@ -89,6 +91,17 @@ public class LoginFragment extends Fragment {
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()'
         si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
         agricultorViewModel = new ViewModelProvider(requireActivity()).get(AgricultorViewModel.class);
+
+
+    //REVISAR ESTE METODO
+        try {
+            FirebaseUser usr = firebaseAuth.getCurrentUser();
+            if (usr != null) {
+                irainicio(usr.getEmail(), view);
+            }
+        } catch (Exception e) {
+            Log.e("ERROR DE USR",e.toString());
+        }
     }
 
     private void initListener() {
@@ -109,10 +122,10 @@ public class LoginFragment extends Fragment {
                         .commit();
             } Al usar .replace(), estabamos evitando usar el sistema de navegación, por lo que el fragmento de destino (RegistrarseFragment) quedaba huérfano y sin herramientas de navegación.*/
 
-            // --- FORMA CORRECTA (Navigation Component) ---
-            // debemos asegurarnos de tener una acción creada en el mobile_navigation.xml
-            // que vaya de LoginFragment a RegistrarseFragment
-            Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrarseFragment);
+                // --- FORMA CORRECTA (Navigation Component) ---
+                // debemos asegurarnos de tener una acción creada en el mobile_navigation.xml
+                // que vaya de LoginFragment a RegistrarseFragment
+                Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrarseFragment);
             }
         });
     }
@@ -133,8 +146,8 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            irainicio(email, contra, view);
-                            Toast.makeText(getContext(), "Bienvenido "+ agricultorEncontrado.getNomAgricultor()+"!!", Toast.LENGTH_SHORT).show();
+                            irainicio(email, view);
+                            Toast.makeText(getContext(), "Bienvenido " + agricultorEncontrado.getNomAgricultor() + "!!", Toast.LENGTH_SHORT).show();
                         } else {
                             // Error de Firebase (ej. correo ya en uso en la nube)
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -142,13 +155,13 @@ public class LoginFragment extends Fragment {
                         }
                     }
                 });
-            }else{
+            } else {
                 Toast.makeText(getContext(), "No se encontro el usuario", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void irainicio(String email, String contra, View view) {
+    private void irainicio(String email, View view) {
 
         NavController navController = Navigation.findNavController(requireView());
 
@@ -160,7 +173,6 @@ public class LoginFragment extends Fragment {
             Bundle bundle = new Bundle();
             // 2. Agregamos la información (Clave, Valor)
             bundle.putString("email_agricultor", email);
-            bundle.putString("contra_agricultor", contra);
             //3. Enviamostodo al fragment de inicio
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_inicioFragment, bundle);
 
