@@ -47,5 +47,12 @@
         android:name="com.example.agrotechgamara.ui.fragments.InicioFragment"
         android:label="fragment_inicio"
         tools:layout="@layout/fragment_inicio">
+        <action
+            android:id="@+id/action_inicioFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/entrada"
+            app:exitAnim="@anim/salida"
+            app:popEnterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
 </navigation>

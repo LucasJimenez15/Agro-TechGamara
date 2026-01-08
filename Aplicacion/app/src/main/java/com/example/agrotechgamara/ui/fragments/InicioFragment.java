@@ -3,30 +3,31 @@ package com.example.agrotechgamara.ui.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.agrotechgamara.R;
 import com.example.agrotechgamara.ui.viewmodel.UbicacionViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link InicioFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class InicioFragment extends Fragment {
 
     private UbicacionViewModel ubicacionVM;
     private String emailLogeado, contraLogeada;
+    private Button cerrarSesion;
 
     public InicioFragment() {
         // Required empty public constructor
     }
 
-
-    public static InicioFragment newInstance(String param1, String param2) {
+    public static InicioFragment newInstance() {
         InicioFragment fragment = new InicioFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -48,19 +49,20 @@ public class InicioFragment extends Fragment {
     }
 
     private void init(View view) {
-
-        // 1. Verificamos si existen argumentos
-        if (getArguments() != null) {
-            // 2. Extraemos la información usando las mismas llaves
-            emailLogeado = getArguments().getString("email_agricultor");
-            contraLogeada = getArguments().getString("contra_agricultor");
-            // ya con esta info podemos hacer lo que sea ya sea enviarla a otro fragment o usarla a nuestro favor
-        }
-
         //inicializar los elementos del layout
+        cerrarSesion = view.findViewById(R.id.cerrarSesion);
     }
 
     public void initListener() {
+
+        cerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(getContext(), "Sesion cerrada", Toast.LENGTH_SHORT).show();
+                irALogin(v);
+            }
+        });
 
         /*
         // 1. OBSERVAMOS el resultado de la API de Google Maps
@@ -75,6 +77,19 @@ public class InicioFragment extends Fragment {
             ubicacionVM.solicitarDetalleAvanzado(loteIdActual);
         });
         */
+
+    }
+
+    private void irALogin(View v) {
+        NavController navController = Navigation.findNavController(requireView());
+
+        // Verificamos si el destino actual es realmente el inicio antes de intentar salir de él
+        if (navController.getCurrentDestination() != null &&
+                navController.getCurrentDestination().getId() == R.id.inicioFragment) {
+
+            Navigation.findNavController(v).navigate(R.id.action_inicioFragment_to_loginFragment);
+
+        }
 
     }
 

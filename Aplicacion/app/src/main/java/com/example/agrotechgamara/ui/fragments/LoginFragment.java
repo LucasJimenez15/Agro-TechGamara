@@ -1,8 +1,10 @@
 package com.example.agrotechgamara.ui.fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
@@ -67,7 +69,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void init(View view) {
-
         /*Este codigo hace que la barra de control del celular no se quede por encima de la pantalla o fragmento
         que estamos mostrando y lo sobre ponga*/
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
@@ -91,17 +92,6 @@ public class LoginFragment extends Fragment {
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()'
         si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
         agricultorViewModel = new ViewModelProvider(requireActivity()).get(AgricultorViewModel.class);
-
-
-    //REVISAR ESTE METODO
-        try {
-            FirebaseUser usr = firebaseAuth.getCurrentUser();
-            if (usr != null) {
-                irainicio(usr.getEmail(), view);
-            }
-        } catch (Exception e) {
-            Log.e("ERROR DE USR",e.toString());
-        }
     }
 
     private void initListener() {
@@ -128,12 +118,45 @@ public class LoginFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_loginFragment_to_registrarseFragment);
             }
         });
+
+        loginOlvidemicontra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDialogoOlvideContraseña();
+            }
+        });
+
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Verificamos la sesión aquí, cuando la navegación es segura
+        // y cuando ya esta creada la vista, y ademas el navcontroller ya se cargo
+        comprobarSesion(view);
+    }
+
+    private void comprobarSesion(View view) {
+        try {
+            if (firebaseAuth == null) firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser != null) {
+                irainicio(firebaseUser.getEmail(), view);
+            }
+        } catch (Exception e) {
+            Log.e("ERROR_SESSION", "Error al recuperar usuario: " + e.getMessage());
+        }
+    }
     private void realizarLogin(View view) {
 
         String email = loginEditTextEmail.getText().toString();
         String contra = loginEditTextPassword.getText().toString();
+
+        // B. Validaciones básicas
+        if (email.isEmpty() || contra.isEmpty()) {
+            Toast.makeText(getContext(), "Por favor debe de completar todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         agricultorViewModel.buscarPorEmail(email);
 
@@ -148,15 +171,29 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             irainicio(email, view);
                             Toast.makeText(getContext(), "Bienvenido " + agricultorEncontrado.getNomAgricultor() + "!!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Error de Firebase (ej. correo ya en uso en la nube)
-                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                            dameToastdeerror(errorCode);
+                        }else{
+                            final Toast toast = Toast.makeText(getContext(), "No se encontró el usuario", Toast.LENGTH_SHORT);
+                            toast.show();
+                            // Usamos un Handler para cancelarlo después de 1 segundo (1000ms)
+                            new android.os.Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toast.cancel();
+                                }
+                            }, 500);
                         }
                     }
                 });
             } else {
-                Toast.makeText(getContext(), "No se encontro el usuario", Toast.LENGTH_SHORT).show();
+                final Toast toast = Toast.makeText(getContext(), "No se encontró el usuario", Toast.LENGTH_SHORT);
+                toast.show();
+                // Usamos un Handler para cancelarlo después de 1 segundo (1000ms)
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast.cancel();
+                    }
+                }, 500);
             }
         });
     }
@@ -172,6 +209,7 @@ public class LoginFragment extends Fragment {
             // 1. Creamos el paquete (Bundle)
             Bundle bundle = new Bundle();
             // 2. Agregamos la información (Clave, Valor)
+            // si necesitamos luego mandar la contraseña veremos de corregir esto
             bundle.putString("email_agricultor", email);
             //3. Enviamostodo al fragment de inicio
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_inicioFragment, bundle);
@@ -190,85 +228,40 @@ public class LoginFragment extends Fragment {
         (como tu clase Agricultor), esa clase debe implementar la interfaz Serializable o Parcelable.*/
     }
 
+    private void mostrarDialogoOlvideContraseña() {
+        EditText resetMail = new EditText(getContext());
+        resetMail.setHint("ejemplo@correo.com");
+        resetMail.setPadding(50, 50, 50, 50);
 
-    public void dameToastdeerror(String error) {
+        AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(getContext());
+        passwordResetDialog.setTitle("¿Restablecer contraseña?");
+        passwordResetDialog.setMessage("Ingresa tu correo para recibir el enlace de restablecimiento.");
+        passwordResetDialog.setView(resetMail);
 
-        switch (error) {
+        passwordResetDialog.setPositiveButton("Enviar", (dialog, which) -> {
+            String mail = resetMail.getText().toString().trim();
+            if (mail.isEmpty()) {
+                Toast.makeText(getContext(), "Por favor, ingresa un correo", Toast.LENGTH_SHORT).show();
+            } else {
+                enviarEmailDeRecuperacion(mail);
+            }
+        });
 
-            case "ERROR_INVALID_CUSTOM_TOKEN":
-                Toast.makeText(getContext(), "El formato del token personalizado es incorrecto. Por favor revise la documentación", Toast.LENGTH_LONG).show();
-                break;
+        passwordResetDialog.setNegativeButton("Cancelar", (dialog, which) -> {
+            // Cerrar diálogo
+        });
 
-            case "ERROR_CUSTOM_TOKEN_MISMATCH":
-                Toast.makeText(getContext(), "El token personalizado corresponde a una audiencia diferente.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_INVALID_CREDENTIAL":
-                Toast.makeText(getContext(), "La credencial de autenticación proporcionada tiene un formato incorrecto o ha caducado.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_INVALID_EMAIL":
-                Toast.makeText(getContext(), "La dirección de correo electrónico está mal formateada.", Toast.LENGTH_LONG).show();
-                loginEditTextEmail.setError("La dirección de correo electrónico está mal formateada.");
-                loginEditTextEmail.requestFocus();
-                break;
-
-            case "ERROR_WRONG_PASSWORD":
-                Toast.makeText(getContext(), "La contraseña no es válida o el usuario no tiene contraseña.", Toast.LENGTH_LONG).show();
-                loginEditTextPassword.setError("la contraseña es incorrecta ");
-                loginEditTextPassword.requestFocus();
-                loginEditTextPassword.setText("");
-                break;
-
-            case "ERROR_USER_MISMATCH":
-                Toast.makeText(getContext(), "Las credenciales proporcionadas no corresponden al usuario que inició sesión anteriormente..", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_REQUIRES_RECENT_LOGIN":
-                Toast.makeText(getContext(), "Esta operación es sensible y requiere autenticación reciente. Inicie sesión nuevamente antes de volver a intentar esta solicitud.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                Toast.makeText(getContext(), "Ya existe una cuenta con la misma dirección de correo electrónico pero diferentes credenciales de inicio de sesión. Inicie sesión con un proveedor asociado a esta dirección de correo electrónico.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_EMAIL_ALREADY_IN_USE":
-                Toast.makeText(getContext(), "La dirección de correo electrónico ya está siendo utilizada por otra cuenta..   ", Toast.LENGTH_LONG).show();
-                loginEditTextEmail.setError("La dirección de correo electrónico ya está siendo utilizada por otra cuenta.");
-                loginEditTextEmail.requestFocus();
-                break;
-
-            case "ERROR_CREDENTIAL_ALREADY_IN_USE":
-                Toast.makeText(getContext(), "Esta credencial ya está asociada con una cuenta de usuario diferente.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_USER_DISABLED":
-                Toast.makeText(getContext(), "La cuenta de usuario ha sido inhabilitada por un administrador..", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_USER_TOKEN_EXPIRED":
-                Toast.makeText(getContext(), "La credencial del usuario ya no es válida. El usuario debe iniciar sesión nuevamente.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_USER_NOT_FOUND":
-                Toast.makeText(getContext(), "No hay ningún registro de usuario que corresponda a este identificador. Es posible que se haya eliminado al usuario.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_INVALID_USER_TOKEN":
-                Toast.makeText(getContext(), "La credencial del usuario ya no es válida. El usuario debe iniciar sesión nuevamente.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_OPERATION_NOT_ALLOWED":
-                Toast.makeText(getContext(), "Esta operación no está permitida. Debes habilitar este servicio en la consola.", Toast.LENGTH_LONG).show();
-                break;
-
-            case "ERROR_WEAK_PASSWORD":
-                Toast.makeText(getContext(), "La contraseña proporcionada no es válida..", Toast.LENGTH_LONG).show();
-                loginEditTextPassword.setError("La contraseña no es válida, debe tener al menos 6 caracteres");
-                loginEditTextPassword.requestFocus();
-                break;
-
-        }
+        passwordResetDialog.create().show();
     }
+
+    private void enviarEmailDeRecuperacion(String email) {
+        firebaseAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "Enlace enviado a tu correo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
 }

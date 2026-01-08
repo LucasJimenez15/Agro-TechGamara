@@ -6,5 +6,6 @@
     <color name="verdeOpcionButtomNav">#00A615</color>
     <color name="fondoClaro">#F2F2F7</color>
     <color name="verdeBottomNav">#C9FFCB</color>
-    <color name="VerdeTransparente">#2200FF00</color> <!-- verde transparente -->
+    <color name="VerdeTransparente">#2200FF00</color>
+    <color name="cerrarSesion">#F50E00</color>
 </resources>
