@@ -1,8 +1,10 @@
 package com.example.agrotechgamara.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.agrotechgamara.R;
+import com.example.agrotechgamara.ui.activitys.MainActivity;
 import com.example.agrotechgamara.ui.viewmodel.UbicacionViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -51,6 +54,8 @@ public class InicioFragment extends Fragment {
     private void init(View view) {
         //inicializar los elementos del layout
         cerrarSesion = view.findViewById(R.id.cerrarSesion);
+        //Inicializar el ViewModel
+        ubicacionVM = new ViewModelProvider(this).get(UbicacionViewModel.class);
     }
 
     public void initListener() {
@@ -87,7 +92,11 @@ public class InicioFragment extends Fragment {
         if (navController.getCurrentDestination() != null &&
                 navController.getCurrentDestination().getId() == R.id.inicioFragment) {
 
-            Navigation.findNavController(v).navigate(R.id.action_inicioFragment_to_loginFragment);
+            //Si el LoginFragment está en OTRA Activity (Recomendado para Auth)
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+            requireActivity().finish(); // Cerramos la principalActivity para que no puedan volver atrás
+
 
         }
 

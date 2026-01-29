@@ -1,6 +1,7 @@
 package com.example.agrotechgamara.ui.fragments;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.agrotechgamara.R;
+import com.example.agrotechgamara.data.model.Agricultor;
+import com.example.agrotechgamara.ui.activitys.MainActivity;
+import com.example.agrotechgamara.ui.activitys.PrincipalActivity;
+import com.example.agrotechgamara.ui.activitys.SplashScreen;
 import com.example.agrotechgamara.ui.viewmodel.AgricultorViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -148,52 +153,52 @@ public class LoginFragment extends Fragment {
         }
     }
     private void realizarLogin(View view) {
+        String email = loginEditTextEmail.getText().toString().trim();
+        String contra = loginEditTextPassword.getText().toString().trim();
 
-        String email = loginEditTextEmail.getText().toString();
-        String contra = loginEditTextPassword.getText().toString();
-
-        // B. Validaciones básicas
         if (email.isEmpty() || contra.isEmpty()) {
-            Toast.makeText(getContext(), "Por favor debe de completar todos los campos", Toast.LENGTH_SHORT).show();
+            mostrarToastCorto("Completa todos los campos");
             return;
         }
 
-        agricultorViewModel.buscarPorEmail(email);
-
-        // Observamos si el usuario ya existe
-        agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
-            if (agricultorEncontrado != null) {
-                // Si entra aquí, significa que el email YA EXISTE en la base de datos
-
-                firebaseAuth.signInWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            irainicio(email, view);
-                            Toast.makeText(getContext(), "Bienvenido " + agricultorEncontrado.getNomAgricultor() + "!!", Toast.LENGTH_SHORT).show();
-                        }else{
-                            final Toast toast = Toast.makeText(getContext(), "No se encontró el usuario", Toast.LENGTH_SHORT);
-                            toast.show();
-                            // Usamos un Handler para cancelarlo después de 1 segundo (1000ms)
-                            new android.os.Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    toast.cancel();
-                                }
-                            }, 500);
+        // 1. Intentamos primero Firebase (Online)
+        firebaseAuth.signInWithEmailAndPassword(email, contra)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // LOGIN EXITOSO POR FIREBASE
+                        Toast.makeText(getContext(), "Sesión iniciada (Online)", Toast.LENGTH_SHORT).show();
+                        irainicio(email, view);
+                    } else {
+                        // 2. Si Firebase falla, verificamos si es por falta de red
+                        Exception exception = task.getException();
+                        if (exception instanceof com.google.firebase.FirebaseNetworkException) {
+                            // NO HAY INTERNET: Intentamos el respaldo con Room
+                            intentoLoginOffline(email, contra, view);
+                        } else {
+                            // ERROR REAL (Contraseña mal, usuario no existe en Firebase, etc.)
+                            mostrarToastCorto("Error de autenticación online");
                         }
                     }
                 });
+    }
+
+    private void intentoLoginOffline(String email, String contra, View view) {
+        // Buscamos en Room solo como última instancia
+        agricultorViewModel.buscarPorEmail(email);
+
+        // IMPORTANTE: Quitamos observadores previos para no acumular basura
+        agricultorViewModel.getResultadoBusqueda().removeObservers(getViewLifecycleOwner());
+
+        agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultor -> {
+            if (agricultor != null) {
+                if (agricultor.getContaAgricultor().equals(contra)) {
+                    Toast.makeText(getContext(), "Modo Offline: Bienvenido " + agricultor.getNomAgricultor(), Toast.LENGTH_LONG).show();
+                    irainicio(email, view);
+                } else {
+                    mostrarToastCorto("Contraseña local incorrecta (Offline) ");
+                }
             } else {
-                final Toast toast = Toast.makeText(getContext(), "No se encontró el usuario", Toast.LENGTH_SHORT);
-                toast.show();
-                // Usamos un Handler para cancelarlo después de 1 segundo (1000ms)
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        toast.cancel();
-                    }
-                }, 500);
+                mostrarToastCorto("No existe ese usuario, prueba conectandote a internet");
             }
         });
     }
@@ -206,13 +211,15 @@ public class LoginFragment extends Fragment {
         if (navController.getCurrentDestination() != null &&
                 navController.getCurrentDestination().getId() == R.id.loginFragment) {
 
-            // 1. Creamos el paquete (Bundle)
-            Bundle bundle = new Bundle();
-            // 2. Agregamos la información (Clave, Valor)
-            // si necesitamos luego mandar la contraseña veremos de corregir esto
-            bundle.putString("email_agricultor", email);
-            //3. Enviamostodo al fragment de inicio
-            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_inicioFragment, bundle);
+            // 1. Crear el Intent para la nueva actividad
+            Intent intent = new Intent(getContext(), PrincipalActivity.class);
+            // 2. Pasar los datos directamente al Intent
+            intent.putExtra("email_agricultor", email);
+            // 3. (Opcional) Indicar a qué fragmento ir si PrincipalActivity tiene varios
+            intent.putExtra("target_fragment", "inicio");
+            // 4. Iniciar la actividad y cerrar la actual (para que no puedan volver al login con el botón atrás)
+            startActivity(intent);
+            requireActivity().finish();
 
         }
 
@@ -263,5 +270,17 @@ public class LoginFragment extends Fragment {
                 });
     }
 
+
+    private void mostrarToastCorto(String mensaje){
+        Toast toast = Toast.makeText(getContext(), mensaje, Toast.LENGTH_SHORT);
+        toast.show();
+        // Usamos un Handler para cancelarlo después de 1 segundo (1000ms)
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 500);
+    }
 
 }
