@@ -36,6 +36,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.rpc.context.AttributeContext;
+
+import java.util.List;
 
 public class LoginFragment extends Fragment {
 
@@ -46,6 +49,8 @@ public class LoginFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db; // Para el envío de correos
     private AgricultorViewModel agricultorViewModel;
+    private static final int REQUEST_CODE = 54645;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -93,6 +98,8 @@ public class LoginFragment extends Fragment {
         por asi decirlo del usuario y ademas el uso de el envio de emails*/
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+
 
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()'
         si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
