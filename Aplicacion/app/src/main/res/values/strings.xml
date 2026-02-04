@@ -7,6 +7,7 @@
     <string name="control">Control\n</string>
     <string name="perfil">Perfil\n</string>
 
+    <string name="default_web_client_id">85778134090-pqr6sr4ts7dvr5i10g37cnsureu16c6s.apps.googleusercontent.com</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

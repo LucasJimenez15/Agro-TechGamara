@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "85778134090-r7bvrunep8jjq78vdiv62ni26sqkqtk5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agrotechgamara",
+            "certificate_hash": "abf8582012a4badc6754e0fd1e559c294e9d0441"
+          }
+        },
+        {
           "client_id": "85778134090-pqr6sr4ts7dvr5i10g37cnsureu16c6s.apps.googleusercontent.com",
           "client_type": 3
         }

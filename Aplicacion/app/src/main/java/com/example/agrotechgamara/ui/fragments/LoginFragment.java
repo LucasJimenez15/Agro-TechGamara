@@ -3,16 +3,6 @@ package com.example.agrotechgamara.ui.fragments;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,22 +13,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.credentials.Credential;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.GetCredentialException;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.example.agrotechgamara.R;
 import com.example.agrotechgamara.data.model.Agricultor;
-import com.example.agrotechgamara.ui.activitys.MainActivity;
 import com.example.agrotechgamara.ui.activitys.PrincipalActivity;
-import com.example.agrotechgamara.ui.activitys.SplashScreen;
 import com.example.agrotechgamara.ui.viewmodel.AgricultorViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.rpc.context.AttributeContext;
 
-import java.util.List;
+import java.util.concurrent.Executors;
 
 public class LoginFragment extends Fragment {
 
@@ -51,6 +55,9 @@ public class LoginFragment extends Fragment {
     private AgricultorViewModel agricultorViewModel;
     private static final int REQUEST_CODE = 54645;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private CredentialManager credentialManager;
+    private FirebaseAuth mAuth;
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -99,11 +106,15 @@ public class LoginFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
-
         /*Inicializar el ViewModel correctamente Usamos 'requireActivity()'
         si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
         agricultorViewModel = new ViewModelProvider(requireActivity()).get(AgricultorViewModel.class);
+
+        mAuth = FirebaseAuth.getInstance();
+        // Inicializamos el Credential Manager
+        credentialManager = CredentialManager.create(requireContext());
+
+        logoGoogle.setOnClickListener(v -> lanzarLoginGoogle());
     }
 
     private void initListener() {
@@ -159,6 +170,7 @@ public class LoginFragment extends Fragment {
             Log.e("ERROR_SESSION", "Error al recuperar usuario: " + e.getMessage());
         }
     }
+
     private void realizarLogin(View view) {
         String email = loginEditTextEmail.getText().toString().trim();
         String contra = loginEditTextPassword.getText().toString().trim();
@@ -174,6 +186,19 @@ public class LoginFragment extends Fragment {
                     if (task.isSuccessful()) {
                         // LOGIN EXITOSO POR FIREBASE
                         Toast.makeText(getContext(), "Sesión iniciada (Online)", Toast.LENGTH_SHORT).show();
+
+                        agricultorViewModel.buscarPorEmail(email);
+                        // Observamos si el usuario ya existe
+                        agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
+                            if (agricultorEncontrado == null) {
+                                // Guardar en base de datos local si no existe
+                                Agricultor nuevo = new Agricultor();
+                                nuevo.setEmailAgricultor(email);
+                                nuevo.setContaAgricultor(contra);
+                                agricultorViewModel.registrarAgricultor(nuevo);
+                            }
+                        });
+
                         irainicio(email, view);
                     } else {
                         // 2. Si Firebase falla, verificamos si es por falta de red
@@ -278,7 +303,7 @@ public class LoginFragment extends Fragment {
     }
 
 
-    private void mostrarToastCorto(String mensaje){
+    private void mostrarToastCorto(String mensaje) {
         Toast toast = Toast.makeText(getContext(), mensaje, Toast.LENGTH_SHORT);
         toast.show();
         // Usamos un Handler para cancelarlo después de 1 segundo (1000ms)
@@ -289,5 +314,67 @@ public class LoginFragment extends Fragment {
             }
         }, 500);
     }
+
+    private void lanzarLoginGoogle() {
+        // 1. Configurar la opción de Google
+        GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false) // Ponlo en false para que siempre deje elegir cuenta
+                .setServerClientId(getString(R.string.default_web_client_id))
+                .build();
+
+        // 2. Crear la solicitud
+        GetCredentialRequest request = new GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build();
+
+        // 3. Ejecutar de forma asíncrona
+        credentialManager.getCredentialAsync(
+                requireContext(),
+                request,
+                null,
+                Executors.newSingleThreadExecutor(),
+                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                    @Override
+                    public void onResult(GetCredentialResponse result) {
+                        handleSignIn(result.getCredential());
+                    }
+
+                    @Override
+                    public void onError(GetCredentialException e) {
+                        Log.e("GOOGLE_ERROR", "Error: " + e.getMessage());
+                    }
+                }
+        );
+    }
+
+    // Asegúrate de que el parámetro sea de androidx.credentials.Credential
+    private void handleSignIn(androidx.credentials.Credential credential) {
+        if (credential instanceof androidx.credentials.CustomCredential
+                && credential.getType().equals(com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)) {
+            try {
+                com.google.android.libraries.identity.googleid.GoogleIdTokenCredential googleIdTokenCredential =
+                        com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.createFrom(credential.getData());
+
+                firebaseAuthWithGoogle(googleIdTokenCredential.getIdToken());
+
+            } catch (Exception e) {
+                Log.e("GOOGLE_ERROR", "Error al parsear el token", e);
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        irainicio(user.getEmail(), requireView());
+                    } else {
+                        mostrarToastCorto("Fallo la autenticación con Firebase");
+                    }
+                });
+    }
+
 
 }
