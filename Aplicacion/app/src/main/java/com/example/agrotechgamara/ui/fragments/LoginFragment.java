@@ -56,7 +56,6 @@ public class LoginFragment extends Fragment {
     private static final int REQUEST_CODE = 54645;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private CredentialManager credentialManager;
-    private FirebaseAuth mAuth;
 
 
     public LoginFragment() {
@@ -110,11 +109,8 @@ public class LoginFragment extends Fragment {
         si queremos compartir el VM con otros fragments, o 'this' si es solo para este.*/
         agricultorViewModel = new ViewModelProvider(requireActivity()).get(AgricultorViewModel.class);
 
-        mAuth = FirebaseAuth.getInstance();
         // Inicializamos el Credential Manager
         credentialManager = CredentialManager.create(requireContext());
-
-        logoGoogle.setOnClickListener(v -> lanzarLoginGoogle());
     }
 
     private void initListener() {
@@ -149,6 +145,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        logoGoogle.setOnClickListener(v -> lanzarLoginGoogle());
     }
 
     @Override
@@ -347,16 +344,13 @@ public class LoginFragment extends Fragment {
         );
     }
 
-    // Asegúrate de que el parámetro sea de androidx.credentials.Credential
     private void handleSignIn(androidx.credentials.Credential credential) {
         if (credential instanceof androidx.credentials.CustomCredential
                 && credential.getType().equals(com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)) {
             try {
                 com.google.android.libraries.identity.googleid.GoogleIdTokenCredential googleIdTokenCredential =
                         com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.createFrom(credential.getData());
-
                 firebaseAuthWithGoogle(googleIdTokenCredential.getIdToken());
-
             } catch (Exception e) {
                 Log.e("GOOGLE_ERROR", "Error al parsear el token", e);
             }
@@ -365,11 +359,12 @@ public class LoginFragment extends Fragment {
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
+        firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser user = firebaseAuth.getCurrentUser();
                         irainicio(user.getEmail(), requireView());
+                        Toast.makeText(getContext(), "Bienvenido "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
                     } else {
                         mostrarToastCorto("Fallo la autenticación con Firebase");
                     }

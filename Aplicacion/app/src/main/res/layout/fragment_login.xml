@@ -20,7 +20,7 @@
             <!-- Encabezado verde con el logo -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="143dp"
+                android:layout_height="170dp"
                 android:background="#CFFFCF"
                 android:gravity="center">
 
@@ -57,7 +57,7 @@
                 android:padding="10dp"
                 app:hintEnabled="true"
                 app:hintTextColor="#4A662C"
-                android:hint="Correo Elctronico"
+                android:hint="Correo Electronico"
                 android:textColorHint="#4A662C">
 
                 <com.google.android.material.textfield.TextInputEditText
