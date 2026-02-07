@@ -73,5 +73,8 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
+    //implementacion de google maps
+    implementation("com.google.android.gms:play-services-maps:20.0.0")
+
 
 }

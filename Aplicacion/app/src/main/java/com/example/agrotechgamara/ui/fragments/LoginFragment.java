@@ -221,7 +221,7 @@ public class LoginFragment extends Fragment {
         agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultor -> {
             if (agricultor != null) {
                 if (agricultor.getContaAgricultor().equals(contra)) {
-                    Toast.makeText(getContext(), "Modo Offline: Bienvenido " + agricultor.getNomAgricultor(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Modo Offline Bienvenido", Toast.LENGTH_LONG).show();
                     irainicio(email, view);
                 } else {
                     mostrarToastCorto("Contraseña local incorrecta (Offline) ");

@@ -19,7 +19,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_principal);
 
         // 1. Configurar el NavController correctamente
-        // IMPORTANTE: El ID aquí debe ser el del NavHostFragment en tu XML (ej: R.id.nav_host_fragment)
+        // IMPORTANTE: El ID aquí debe ser el del NavHostFragment del XML (ej: R.id.nav_host_fragment)
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.frameContainerPrincipal);
 
