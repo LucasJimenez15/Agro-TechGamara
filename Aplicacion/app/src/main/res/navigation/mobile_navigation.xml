@@ -54,5 +54,17 @@
             app:exitAnim="@anim/salida"
             app:popEnterAnim="@anim/slide_in"
             app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_inicioFragment_to_cerrarSesionFragment"
+            app:destination="@id/cerrarSesionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cerrarSesionFragment"
+        android:name="com.example.agrotechgamara.ui.fragments.CerrarSesionFragment"
+        android:label="fragment_cerrar_sesion"
+        tools:layout="@layout/fragment_cerrar_sesion" >
+        <action
+            android:id="@+id/action_cerrarSesionFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 </navigation>

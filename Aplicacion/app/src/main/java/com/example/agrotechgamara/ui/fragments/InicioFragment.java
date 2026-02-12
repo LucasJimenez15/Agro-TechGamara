@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,7 +35,6 @@ public class InicioFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private UbicacionViewModel ubicacionVM;
     private String emailLogeado, contraLogeada;
-    private Button cerrarSesion;
     private EditText txtLongitud, txtLatitud;
     private GoogleMap mMap;
 
@@ -65,7 +65,6 @@ public class InicioFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private void init(View view) {
         //inicializar los elementos del layout
-        cerrarSesion = view.findViewById(R.id.cerrarSesion);
         //Inicializar el ViewModel
         ubicacionVM = new ViewModelProvider(this).get(UbicacionViewModel.class);
         txtLongitud = view.findViewById(R.id.txtLongitud);
@@ -76,46 +75,6 @@ public class InicioFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     public void initListener() {
-
-        cerrarSesion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Toast.makeText(getContext(), "Sesion cerrada", Toast.LENGTH_SHORT).show();
-                irALogin(v);
-            }
-        });
-
-        /*
-        // 1. OBSERVAMOS el resultado de la API de Google Maps
-        ubicacionVM.detalleMapaAvanzado.observe(getViewLifecycleOwner(), detalle -> {
-            // Este código se ejecuta cuando el Repositorio termina la llamada a la API
-            textoDetalleAvanzado.setText(detalle);
-        });
-
-        // 2. INICIAMOS la solicitud (ej. al presionar un botón)
-        botonCalcularArea.setOnClickListener(v -> {
-            int loteIdActual = obtenerIdLoteDeMapa();
-            ubicacionVM.solicitarDetalleAvanzado(loteIdActual);
-        });
-        */
-
-    }
-
-    private void irALogin(View v) {
-        NavController navController = Navigation.findNavController(requireView());
-
-        // Verificamos si el destino actual es realmente el inicio antes de intentar salir de él
-        if (navController.getCurrentDestination() != null &&
-                navController.getCurrentDestination().getId() == R.id.inicioFragment) {
-
-            //Si el LoginFragment está en OTRA Activity (Recomendado para Auth)
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-            requireActivity().finish(); // Cerramos la principalActivity para que no puedan volver atrás
-
-
-        }
 
     }
 

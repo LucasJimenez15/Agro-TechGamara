@@ -45,18 +45,6 @@
             android:background="@color/VerdeTransparente">
         </EditText>
 
-        <!-- Botón Iniciar Sesión -->
-        <Button
-            android:id="@+id/cerrarSesion"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:text="Cerrar Sesión"
-            android:layout_margin="15dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/montserratbold"
-            android:backgroundTint="@color/cerrarSesion"/>
     </LinearLayout>
 
 </FrameLayout>
