@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -207,6 +210,14 @@ public class RegistrarseFragment extends Fragment {
     private void registrarEnFirebaseYLocal(String nombre, String correo, String pass) {
         firebaseAuth.createUserWithEmailAndPassword(correo, pass)
                 .addOnCompleteListener(task -> {
+
+                    /*como el usuario ya se creo correctamente para firebase ahora toca guardarle el nombre con el que se creo
+                     para ello se usa este bloque de codigo*/
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(nombre) // Aquí guardas el nombre real con el que ingreso el usuario o se registro
+                            .build();
+
                     if (task.isSuccessful()) {
                         // Paso A: Guardar en base de datos local
                         Agricultor nuevo = new Agricultor();

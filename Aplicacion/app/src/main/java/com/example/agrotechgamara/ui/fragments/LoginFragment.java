@@ -161,7 +161,7 @@ public class LoginFragment extends Fragment {
             if (firebaseAuth == null) firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
             if (firebaseUser != null) {
-                irainicio(firebaseUser.getEmail(), view);
+                irainicio(firebaseUser.getEmail(), view, firebaseUser.getDisplayName());
             }
         } catch (Exception e) {
             Log.e("ERROR_SESSION", "Error al recuperar usuario: " + e.getMessage());
@@ -173,44 +173,60 @@ public class LoginFragment extends Fragment {
         String contra = loginEditTextPassword.getText().toString().trim();
 
         if (email.isEmpty() || contra.isEmpty()) {
-            mostrarToastCorto("Completa todos los campos");
+            mostrarToastCorto("Completa todos los campos por favor");
             return;
         }
 
-        // 1. Intentamos primero Firebase (Online)
         firebaseAuth.signInWithEmailAndPassword(email, contra)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // LOGIN EXITOSO POR FIREBASE
-                        Toast.makeText(getContext(), "Sesión iniciada (Online)", Toast.LENGTH_SHORT).show();
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
+                        // 1. Intentamos obtener el nombre de Firebase
+                        String nombreFirebase = firebaseUser.getDisplayName();
+
+                        // 2. Buscamos en Room para ver si lo tenemos guardado localmente
                         agricultorViewModel.buscarPorEmail(email);
-                        // Observamos si el usuario ya existe
+
+                        // Quitamos observadores viejos para evitar que se dispare varias veces
+                        agricultorViewModel.getResultadoBusqueda().removeObservers(getViewLifecycleOwner());
+
                         agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultorEncontrado -> {
+                            String nombreFinal = "------";
+
+                            if (agricultorEncontrado != null) {
+                                // Si existe en Room, priorizamos ese nombre (porque Firebase suele dar null)
+                                nombreFinal = agricultorEncontrado.getNomAgricultor();
+                            } else if (nombreFirebase != null && !nombreFirebase.isEmpty()) {
+                                // Si no está en Room pero sí en Firebase
+                                nombreFinal = nombreFirebase;
+                            }
+
+                            // 3. Si no existía en Room (usuario nuevo o primer login en este cel), lo guardamos
                             if (agricultorEncontrado == null) {
-                                // Guardar en base de datos local si no existe
                                 Agricultor nuevo = new Agricultor();
                                 nuevo.setEmailAgricultor(email);
                                 nuevo.setContaAgricultor(contra);
+                                nuevo.setNomAgricultor(nombreFinal);
                                 agricultorViewModel.registrarAgricultor(nuevo);
                             }
+
+                            Toast.makeText(getContext(), "(Modo Online) Bienvenido " + nombreFinal, Toast.LENGTH_SHORT).show();
+                            irainicio(email, view, nombreFinal);
                         });
 
-                        irainicio(email, view);
                     } else {
-                        // 2. Si Firebase falla, verificamos si es por falta de red
+                        // Manejo de errores (Offline / Credenciales mal)
                         Exception exception = task.getException();
                         if (exception instanceof com.google.firebase.FirebaseNetworkException) {
-                            // NO HAY INTERNET: Intentamos el respaldo con Room
+                            //en caso de perdida de internet iniciamo por room offline
                             intentoLoginOffline(email, contra, view);
                         } else {
-                            // ERROR REAL (Contraseña mal, usuario no existe en Firebase, etc.)
-                            mostrarToastCorto("Error de autenticación online");
+                            mostrarToastCorto("Error: Verifique sus credenciales");
                         }
                     }
                 });
     }
-
     private void intentoLoginOffline(String email, String contra, View view) {
         // Buscamos en Room solo como última instancia
         agricultorViewModel.buscarPorEmail(email);
@@ -221,8 +237,8 @@ public class LoginFragment extends Fragment {
         agricultorViewModel.getResultadoBusqueda().observe(getViewLifecycleOwner(), agricultor -> {
             if (agricultor != null) {
                 if (agricultor.getContaAgricultor().equals(contra)) {
-                    Toast.makeText(getContext(), "Modo Offline Bienvenido", Toast.LENGTH_LONG).show();
-                    irainicio(email, view);
+                    Toast.makeText(getContext(), "(Modo Offline) Bienvenido "+agricultor.getNomAgricultor(), Toast.LENGTH_LONG).show();
+                    irainicio(email, view, agricultor.getNomAgricultor());
                 } else {
                     mostrarToastCorto("Contraseña local incorrecta (Offline) ");
                 }
@@ -232,7 +248,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void irainicio(String email, View view) {
+    private void irainicio(String email, View view, String nombre) {
 
         NavController navController = Navigation.findNavController(requireView());
 
@@ -240,10 +256,11 @@ public class LoginFragment extends Fragment {
         if (navController.getCurrentDestination() != null &&
                 navController.getCurrentDestination().getId() == R.id.loginFragment) {
 
-            // 1. Crear el Intent para la nueva actividad
+            // 1. Crear el Intent para la nueva actividad, para cambiar los fragmentConteinerView
             Intent intent = new Intent(getContext(), PrincipalActivity.class);
             // 2. Pasar los datos directamente al Intent
             intent.putExtra("email_agricultor", email);
+            intent.putExtra("nombre_agricultor", nombre);
             // 3. (Opcional) Indicar a qué fragmento ir si PrincipalActivity tiene varios
             intent.putExtra("target_fragment", "inicio");
             // 4. Iniciar la actividad y cerrar la actual (para que no puedan volver al login con el botón atrás)
@@ -363,7 +380,7 @@ public class LoginFragment extends Fragment {
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
-                        irainicio(user.getEmail(), requireView());
+                        irainicio(user.getEmail(), requireView(), user.getDisplayName());
                         Toast.makeText(getContext(), "Bienvenido "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
                     } else {
                         mostrarToastCorto("Fallo la autenticación con Firebase");

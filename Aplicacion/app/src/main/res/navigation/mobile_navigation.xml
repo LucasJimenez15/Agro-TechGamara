@@ -56,13 +56,13 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_inicioFragment_to_cerrarSesionFragment"
-            app:destination="@id/cerrarSesionFragment" />
+            app:destination="@id/perfilFragment" />
     </fragment>
     <fragment
-        android:id="@+id/cerrarSesionFragment"
-        android:name="com.example.agrotechgamara.ui.fragments.CerrarSesionFragment"
+        android:id="@+id/perfilFragment"
+        android:name="com.example.agrotechgamara.ui.fragments.PerfilFragment"
         android:label="fragment_cerrar_sesion"
-        tools:layout="@layout/fragment_cerrar_sesion" >
+        tools:layout="@layout/fragment_perfil" >
         <action
             android:id="@+id/action_cerrarSesionFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

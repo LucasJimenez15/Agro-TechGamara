@@ -17,16 +17,16 @@ import com.example.agrotechgamara.R;
 import com.example.agrotechgamara.ui.activitys.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class CerrarSesionFragment extends Fragment {
+public class PerfilFragment extends Fragment {
 
     private Button cerrarSesion;
 
-    public CerrarSesionFragment() {
+    public PerfilFragment() {
         // Required empty public constructor
     }
 
-    public static CerrarSesionFragment newInstance(String param1, String param2) {
-        CerrarSesionFragment fragment = new CerrarSesionFragment();
+    public static PerfilFragment newInstance(String param1, String param2) {
+        PerfilFragment fragment = new PerfilFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -40,7 +40,7 @@ public class CerrarSesionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_cerrar_sesion, container, false);
+        View root = inflater.inflate(R.layout.fragment_perfil, container, false);
         init(root);
         initListener();
         return root;
@@ -66,7 +66,7 @@ public class CerrarSesionFragment extends Fragment {
 
         // Verificamos si el destino actual es realmente el inicio antes de intentar salir de él
         if (navController.getCurrentDestination() != null &&
-                navController.getCurrentDestination().getId() == R.id.inicioFragment) {
+                navController.getCurrentDestination().getId() == R.id.perfilFragment) {
 
             //Si el LoginFragment está en OTRA Activity (Recomendado para Auth)
             Intent intent = new Intent(getActivity(), MainActivity.class);

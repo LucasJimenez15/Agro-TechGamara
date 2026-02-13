@@ -17,7 +17,7 @@
         android:title="@string/control" />
 
     <item
-        android:id="@+id/cerrarSesionFragment"
+        android:id="@+id/perfilFragment"
         android:icon="@drawable/perfil_verde"
         android:title="@string/perfil" />
 
